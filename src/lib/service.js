@@ -176,14 +176,14 @@ const dockerEngine = require('docker-engine');
       process.exit(-1)
     }
 
-    console.log(id);
-
     let response;
 
     try {
       response = await startService(id, replicas);
+      console.log(id);
     } catch(e) {
-      console.error('Failed to start service')
+      console.error(`Failed to start service: ${e}`)
+      process.exit(-1)
     }
 
     if (response.Warnings === null) {
