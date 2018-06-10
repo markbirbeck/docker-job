@@ -166,7 +166,7 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async (name, image, replicas=1) => {
+  const main = async (name, image, replicas=1, showlogs=false) => {
     let id;
 
     try {
@@ -205,10 +205,12 @@ const dockerEngine = require('docker-engine');
          * Once completed get the task's details and use them to get the logs:
          */
 
-        const state = await client.Task.TaskInspect({id: task.ID});
-        const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
+        if (showlogs) {
+          const state = await client.Task.TaskInspect({id: task.ID});
+          const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
 
-        console.log(logs)
+          console.log(logs)
+        }
       }
     } else {
       throw new Error(response);
