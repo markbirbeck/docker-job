@@ -166,7 +166,7 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async (name, image, replicas=1, showlogs=false) => {
+  const main = async (name, image, replicas=1, detach=true, showlogs=false) => {
     let id;
 
     try {
@@ -187,29 +187,30 @@ const dockerEngine = require('docker-engine');
     }
 
     if (response.Warnings === null) {
-
-      /**
-       * Get a list of the tasks for this service:
-       */
-
-      const tasks = await taskList(id);
-
-      /**
-       * Now poll each task until it has completed:
-       */
-
-      for (const task of tasks) {
-        await poll(taskState, task.ID);
-
+      if (!detach) {
         /**
-         * Once completed get the task's details and use them to get the logs:
+         * Get a list of the tasks for this service:
          */
 
-        if (showlogs) {
-          const state = await client.Task.TaskInspect({id: task.ID});
-          const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
+        const tasks = await taskList(id);
 
-          console.log(logs)
+        /**
+         * Now poll each task until it has completed:
+         */
+
+        for (const task of tasks) {
+          await poll(taskState, task.ID);
+
+          /**
+           * Once completed get the task's details and use them to get the logs:
+           */
+
+          if (showlogs) {
+            const state = await client.Task.TaskInspect({id: task.ID});
+            const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
+
+            console.log(logs)
+          }
         }
       }
     } else {
