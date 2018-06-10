@@ -24,7 +24,6 @@ const dockerEngine = require('docker-engine');
   const { poll } = require('./poll');
 
   const defaultSpec = {
-    Name: 'test',
     TaskTemplate: {
       ContainerSpec: {
         Image: 'hello-world'
@@ -74,14 +73,14 @@ const dockerEngine = require('docker-engine');
    * Create a service:
    */
 
-  const createService = async () => {
+  const createService = async (name) => {
     /**
      * If we can successfully load information about a service by this name
      * then throw an error because it obviously already exists:
      */
 
     try {
-      await client.Service.ServiceInspect({id: 'test'});
+      await client.Service.ServiceInspect({id: name});
       throw new Error('name conflicts with an existing object')
     }
 
@@ -98,7 +97,12 @@ const dockerEngine = require('docker-engine');
      * Otherwise we're good to go:
      */
 
-    const service = await client.Service.ServiceCreate({body: defaultSpec});
+    const service = await client.Service.ServiceCreate({
+      body: {
+        Name: name,
+        ...defaultSpec
+      }
+    });
 
     return service.ID;
   }
@@ -132,7 +136,7 @@ const dockerEngine = require('docker-engine');
    * Run a service:
    */
 
-  const startService = async (id, replicas=1) => {
+  const startService = async (name, id, replicas=1) => {
     /**
      * To update a service we need the current spec and version number:
      */
@@ -161,11 +165,11 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async () => {
+  const main = async (name) => {
     let id;
 
     try {
-      id = await createService();
+      id = await createService(name);
     } catch(e) {
       console.error(`Failed to create service: ${e}`)
       process.exit(-1)
@@ -176,7 +180,7 @@ const dockerEngine = require('docker-engine');
     let response;
 
     try {
-      response = await startService(id, 3);
+      response = await startService(name, id, 3);
     } catch(e) {
       console.error('Failed to start service')
     }
@@ -210,5 +214,5 @@ const dockerEngine = require('docker-engine');
     }
   }
 
-  await main();
+  await main('test');
 })()
