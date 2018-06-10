@@ -23,22 +23,6 @@ const dockerEngine = require('docker-engine');
   const client = await dockerEngine()
   const { poll } = require('./poll');
 
-  const defaultSpec = {
-    TaskTemplate: {
-      ContainerSpec: {
-        Image: 'hello-world'
-      },
-      RestartPolicy: {
-        Condition: 'none'
-      }
-    },
-    Mode: {
-      Replicated: {
-        Replicas: 0
-      }
-    }
-  };
-
   /**
    * Get info about a service:
    */
@@ -73,7 +57,23 @@ const dockerEngine = require('docker-engine');
    * Create a service:
    */
 
-  const createService = async (name) => {
+  const createService = async (name, image) => {
+    const defaultSpec = {
+      TaskTemplate: {
+        ContainerSpec: {
+          Image: image
+        },
+        RestartPolicy: {
+          Condition: 'none'
+        }
+      },
+      Mode: {
+        Replicated: {
+          Replicas: 0
+        }
+      }
+    };
+
     /**
      * If we can successfully load information about a service by this name
      * then throw an error because it obviously already exists:
@@ -166,11 +166,11 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async (name, replicas=1) => {
+  const main = async (name, image, replicas=1) => {
     let id;
 
     try {
-      id = await createService(name);
+      id = await createService(name, image);
     } catch(e) {
       console.error(`Failed to create service: ${e}`)
       process.exit(-1)
@@ -215,5 +215,5 @@ const dockerEngine = require('docker-engine');
     }
   }
 
-  await main('test', 3);
+  await main('test', 'hello-world', 3);
 })()
