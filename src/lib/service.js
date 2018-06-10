@@ -136,7 +136,7 @@ const dockerEngine = require('docker-engine');
    * Run a service:
    */
 
-  const startService = async (name, id, replicas=1) => {
+  const startService = async (id, replicas) => {
     /**
      * To update a service we need the current spec and version number:
      */
@@ -165,7 +165,7 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async (name) => {
+  const main = async (name, replicas=1) => {
     let id;
 
     try {
@@ -180,7 +180,7 @@ const dockerEngine = require('docker-engine');
     let response;
 
     try {
-      response = await startService(name, id, 3);
+      response = await startService(id, replicas);
     } catch(e) {
       console.error('Failed to start service')
     }
@@ -214,5 +214,5 @@ const dockerEngine = require('docker-engine');
     }
   }
 
-  await main('test');
+  await main('test', 3);
 })()
