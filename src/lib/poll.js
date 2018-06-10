@@ -11,6 +11,10 @@ const poll = (fn, id, delay=500) => {
         case 'complete':
           resolve(state)
           break;
+
+        default:
+          reject(new Error(`Unknown state: '${state}'`))
+          break
       }
     };
     poller();
