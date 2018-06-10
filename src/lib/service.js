@@ -149,9 +149,10 @@ const dockerEngine = require('docker-engine');
      * Next we create a new spec with a modified replicas value:
      */
 
-    const taskSpec = Object.assign({}, spec, {
+    const taskSpec = {
+      ...spec,
       Mode: {Replicated: {Replicas: replicas}}
-    });
+    };
 
     /**
      * Now we can update the service with the new spec:
