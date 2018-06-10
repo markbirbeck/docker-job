@@ -12,6 +12,16 @@ const poll = (fn, id, delay=500) => {
           resolve(state)
           break;
 
+        case 'assigned':
+        case 'pending':
+        case 'preparing':
+        case 'ready':
+        case 'running':
+        case 'shutdown':
+        case 'starting':
+          setTimeout(poller, delay);
+          break;
+
         default:
           reject(new Error(`Unknown state: '${state}'`))
           break
