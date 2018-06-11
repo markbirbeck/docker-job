@@ -7,6 +7,7 @@ const commandLineArgs = require('command-line-args')
  */
 
 const optionDefinitions = [
+  { name: 'detach', alias: 'd', type: Boolean },
   { name: 'replicas', type: Number, defaultValue: 1 },
   { name: 'image', type: String, defaultOption: true }
 ]
