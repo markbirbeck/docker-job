@@ -64,6 +64,19 @@ tap.test('cli', t => {
     })
     t.end()
   })
+
+  t.test('name', t => {
+    process.argv = [
+      '/usr/local/bin/node',
+      '/usr/src/app/test/unit/cli.js',
+      '--name', 'myservice',
+      'hello-world'
+    ]
+    t.same(commandLineArgs(optionDefinitions), {
+      replicas: 1, name: 'myservice', image: 'hello-world'
+    })
+    t.end()
+  })
   t.end()
 })
 
