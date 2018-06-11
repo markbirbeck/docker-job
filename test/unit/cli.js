@@ -7,7 +7,7 @@ const commandLineArgs = require('command-line-args')
  */
 
 const optionDefinitions = [
-  { name: 'replicas', type: Number },
+  { name: 'replicas', type: Number, defaultValue: 1 },
   { name: 'image', type: String, defaultOption: true }
 ]
 
