@@ -24,5 +24,26 @@ tap.test('cli', t => {
     })
     t.end()
   })
+
+  t.test('default value for replicas', t => {
+    process.argv = [
+      '/usr/local/bin/node',
+      '/usr/src/app/test/unit/cli.js',
+      'hello-world'
+    ]
+    t.same(commandLineArgs(optionDefinitions), {
+      replicas: 1, image: 'hello-world'
+    })
+    t.end()
+  })
   t.end()
 })
+
+// { Name: 'test',
+//   Labels: {},
+//   TaskTemplate:
+//    { ContainerSpec: { Image: 'hello-world', Isolation: 'default' },
+//      RestartPolicy: { Condition: 'none', MaxAttempts: 0 },
+//      ForceUpdate: 0,
+//      Runtime: 'container' },
+//   Mode: { Replicated: { Replicas: 3 } } }
