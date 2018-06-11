@@ -9,7 +9,12 @@ const optionDefinitions = [
 ]
 
 const options = (argv) => {
-  return commandLineArgs(optionDefinitions, { argv })
+  const config = commandLineArgs(optionDefinitions, { argv })
+
+  if (config.detach && config.showlogs) {
+    throw new Error('Cannot set both --detach and --showlogs')
+  }
+  return config
 }
 
 module.exports = options

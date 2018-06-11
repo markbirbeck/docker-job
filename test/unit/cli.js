@@ -55,6 +55,12 @@ tap.test('cli', t => {
     })
     t.end()
   })
+
+  t.test('throw if both detach AND showlogs are set', t => {
+    t.throws(() => options('--detach --showlogs hello-world'.split(' ')),
+      new Error('Cannot set both --detach and --showlogs'))
+    t.end()
+  })
   t.end()
 })
 
