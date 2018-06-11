@@ -1,74 +1,57 @@
 #!/usr/bin/env node
 const tap = require('tap')
-const commandLineArgs = require('command-line-args')
 
 /**
- * Create the option definitions for our CLI app:
+ * Get a function that returns the options for our CLI app:
  */
 
-const optionDefinitions = require('../../src/lib/option-definitions')
+const options = require('../../src/lib/option-definitions')
 
 tap.test('cli', t => {
   t.test('simple example with basic parameters', t => {
-    process.argv = [
-      '/usr/local/bin/node',
-      '/usr/src/app/test/unit/cli.js',
-      '--replicas', '7',
-      'hello-world'
-    ]
-    t.same(commandLineArgs(optionDefinitions), {
-      replicas: 7, image: 'hello-world'
+    const config = options('--replicas 7 hello-world'.split(' '))
+    t.same(config, {
+      replicas: 7,
+      image: 'hello-world'
     })
     t.end()
   })
 
   t.test('default value for replicas', t => {
-    process.argv = [
-      '/usr/local/bin/node',
-      '/usr/src/app/test/unit/cli.js',
-      'hello-world'
-    ]
-    t.same(commandLineArgs(optionDefinitions), {
-      replicas: 1, image: 'hello-world'
+    const config = options(['hello-world'])
+    t.same(config, {
+      replicas: 1,
+      image: 'hello-world'
     })
     t.end()
   })
 
   t.test('detach', t => {
-    process.argv = [
-      '/usr/local/bin/node',
-      '/usr/src/app/test/unit/cli.js',
-      '--detach',
-      'hello-world'
-    ]
-    t.same(commandLineArgs(optionDefinitions), {
-      replicas: 1, detach: true, image: 'hello-world'
+    const config = options('--detach hello-world'.split(' '))
+    t.same(config, {
+      replicas: 1,
+      detach: true,
+      image: 'hello-world'
     })
     t.end()
   })
 
   t.test('logs', t => {
-    process.argv = [
-      '/usr/local/bin/node',
-      '/usr/src/app/test/unit/cli.js',
-      '--showlogs',
-      'hello-world'
-    ]
-    t.same(commandLineArgs(optionDefinitions), {
-      replicas: 1, showlogs: true, image: 'hello-world'
+    const config = options('--showlogs hello-world'.split(' '))
+    t.same(config, {
+      replicas: 1,
+      showlogs: true,
+      image: 'hello-world'
     })
     t.end()
   })
 
   t.test('name', t => {
-    process.argv = [
-      '/usr/local/bin/node',
-      '/usr/src/app/test/unit/cli.js',
-      '--name', 'myservice',
-      'hello-world'
-    ]
-    t.same(commandLineArgs(optionDefinitions), {
-      replicas: 1, name: 'myservice', image: 'hello-world'
+    const config = options('--name myservice hello-world'.split(' '))
+    t.same(config, {
+      replicas: 1,
+      name: 'myservice',
+      image: 'hello-world'
     })
     t.end()
   })
