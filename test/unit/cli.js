@@ -36,6 +36,19 @@ tap.test('cli', t => {
     })
     t.end()
   })
+
+  t.test('detach', t => {
+    process.argv = [
+      '/usr/local/bin/node',
+      '/usr/src/app/test/unit/cli.js',
+      '--detach',
+      'hello-world'
+    ]
+    t.same(commandLineArgs(optionDefinitions), {
+      replicas: 1, detach: true, image: 'hello-world'
+    })
+    t.end()
+  })
   t.end()
 })
 
