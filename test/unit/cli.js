@@ -6,13 +6,7 @@ const commandLineArgs = require('command-line-args')
  * Create the option definitions for our CLI app:
  */
 
-const optionDefinitions = [
-  { name: 'detach', alias: 'd', type: Boolean },
-  { name: 'name', type: String },
-  { name: 'replicas', type: Number, defaultValue: 1 },
-  { name: 'showlogs', type: Boolean },
-  { name: 'image', type: String, defaultOption: true }
-]
+const optionDefinitions = require('../../src/lib/option-definitions')
 
 tap.test('cli', t => {
   t.test('simple example with basic parameters', t => {
