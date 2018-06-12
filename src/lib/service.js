@@ -58,7 +58,7 @@ const dockerEngine = require('docker-engine');
    * Create a service:
    */
 
-  const createService = async (name, image) => {
+  const createService = async (image, name) => {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
@@ -76,22 +76,30 @@ const dockerEngine = require('docker-engine');
     };
 
     /**
-     * If we can successfully load information about a service by this name
-     * then throw an error because it obviously already exists:
+     * The name is optional, but if it is present then check that a service
+     * with this name doesn't already exist:
      */
 
-    try {
-      await client.Service.ServiceInspect({id: name});
-      throw new Error('name conflicts with an existing object')
-    }
+    if (name) {
 
-    /**
-     * If the error was anything other than being unable to find the service
-     * then rethrow it:
-     */
+      /**
+       * If we can successfully load information about a service by this name
+       * then throw an error because it obviously already exists:
+       */
 
-    catch(e) {
-      if (e.message !== 'Not Found') throw e
+      try {
+        await client.Service.ServiceInspect({id: name});
+        throw new Error('name conflicts with an existing object')
+      }
+
+      /**
+       * If the error was anything other than being unable to find the service
+       * then rethrow it:
+       */
+
+      catch(e) {
+        if (e.message !== 'Not Found') throw e
+      }
     }
 
     /**
@@ -171,7 +179,7 @@ const dockerEngine = require('docker-engine');
     let id;
 
     try {
-      id = await createService(options.name, options.image);
+      id = await createService(options.image, options.name);
     } catch(e) {
       console.error(`Failed to create service: ${e}`)
       process.exit(-1)
