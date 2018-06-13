@@ -80,6 +80,33 @@ tap.test('poll', t => {
     t.end()
   })
 
+  tap.test('status rejected', async t => {
+    const p = uut.poll(async id => {
+
+      /**
+       * Check that we get back the ID that we passed in:
+       */
+
+      t.equal(id, 'ID2')
+
+      /**
+       * Return some unknown status:
+       */
+
+      return 'rejected'
+    }, 'ID2', 1)
+
+    /**
+     * Check that the polling rejects:
+     */
+
+    try {
+      await p
+    } catch(e) {
+      t.equal(e.message, 'Unable to launch service due to bad paramters. Check the image exists.')
+    }
+  })
+
   tap.test('status unknown', async t => {
     const p = uut.poll(async id => {
 

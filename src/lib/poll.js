@@ -12,6 +12,10 @@ const poll = (fn, id, delay=500) => {
           resolve(state)
           break;
 
+        case 'rejected':
+          reject(new Error('Unable to launch service due to bad paramters. Check the image exists.'))
+          break
+
         case 'assigned':
         case 'pending':
         case 'preparing':
