@@ -208,17 +208,22 @@ const dockerEngine = require('docker-engine');
          */
 
         for (const task of tasks) {
-          await poll(taskState, task.ID);
+          try {
+            await poll(taskState, task.ID);
 
-          /**
-           * Once completed get the task's details and use them to get the logs:
-           */
+            /**
+             * Once completed get the task's details and use them to get the logs:
+             */
 
-          if (options.showlogs) {
-            const state = await client.Task.TaskInspect({id: task.ID});
-            const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
+            if (options.showlogs) {
+              const state = await client.Task.TaskInspect({id: task.ID});
+              const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
 
-            console.log(logs)
+              console.log(logs)
+            }
+          } catch(e) {
+            process.exitCode = -1
+            console.error(`${task.ID}: ${e.message}`)
           }
         }
       }
