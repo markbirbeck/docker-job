@@ -1,0 +1,17 @@
+{
+  "name": "docker-job",
+  "version": "0.1.0",
+  "description": "Run a single job as a Docker Service on Docker Swarm",
+  "dependencies": {
+    "command-line-args": "^5.0.2",
+    "docker-engine": "^0.1.1"
+  },
+  "keywords": [
+    "docker",
+    "docker compose"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/markbirbeck/docker-job",
+  "bugs": "https://github.com/markbirbeck/docker-job/issues",
+  "homepage": "https://github.com/markbirbeck/docker-job"
+}

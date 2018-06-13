@@ -22,6 +22,7 @@ const dockerEngine = require('docker-engine');
 (async () => {
   const client = await dockerEngine()
   const { poll } = require('./poll');
+  const options = require('./option-definitions')()
 
   /**
    * Get info about a service:
@@ -57,7 +58,7 @@ const dockerEngine = require('docker-engine');
    * Create a service:
    */
 
-  const createService = async (name, image) => {
+  const createService = async (image, name) => {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
@@ -75,22 +76,30 @@ const dockerEngine = require('docker-engine');
     };
 
     /**
-     * If we can successfully load information about a service by this name
-     * then throw an error because it obviously already exists:
+     * The name is optional, but if it is present then check that a service
+     * with this name doesn't already exist:
      */
 
-    try {
-      await client.Service.ServiceInspect({id: name});
-      throw new Error('name conflicts with an existing object')
-    }
+    if (name) {
 
-    /**
-     * If the error was anything other than being unable to find the service
-     * then rethrow it:
-     */
+      /**
+       * If we can successfully load information about a service by this name
+       * then throw an error because it obviously already exists:
+       */
 
-    catch(e) {
-      if (e.message !== 'Not Found') throw e
+      try {
+        await client.Service.ServiceInspect({id: name});
+        throw new Error('name conflicts with an existing object')
+      }
+
+      /**
+       * If the error was anything other than being unable to find the service
+       * then rethrow it:
+       */
+
+      catch(e) {
+        if (e.message !== 'Not Found') throw e
+      }
     }
 
     /**
@@ -166,11 +175,11 @@ const dockerEngine = require('docker-engine');
     });
   }
 
-  const main = async (name, image, replicas=1, detach=true, showlogs=false) => {
+  const main = async () => {
     let id;
 
     try {
-      id = await createService(name, image);
+      id = await createService(options.image, options.name);
     } catch(e) {
       console.error(`Failed to create service: ${e}`)
       process.exit(-1)
@@ -179,7 +188,7 @@ const dockerEngine = require('docker-engine');
     let response;
 
     try {
-      response = await startService(id, replicas);
+      response = await startService(id, options.replicas);
       console.log(id);
     } catch(e) {
       console.error(`Failed to start service: ${e}`)
@@ -187,7 +196,7 @@ const dockerEngine = require('docker-engine');
     }
 
     if (response.Warnings === null) {
-      if (!detach) {
+      if (!options.detach) {
         /**
          * Get a list of the tasks for this service:
          */
@@ -205,7 +214,7 @@ const dockerEngine = require('docker-engine');
            * Once completed get the task's details and use them to get the logs:
            */
 
-          if (showlogs) {
+          if (options.showlogs) {
             const state = await client.Task.TaskInspect({id: task.ID});
             const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
 
@@ -218,5 +227,5 @@ const dockerEngine = require('docker-engine');
     }
   }
 
-  await main('test', 'hello-world', 3);
+  await main();
 })()
