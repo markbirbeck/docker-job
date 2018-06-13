@@ -1,5 +1,23 @@
 # docker-job
 
+Run one-shot services on a Docker Swarm.
+
+When using a Docker Swarm, if a container is launched with `docker run` it is not actually run by the swarm--it is run as a *standalone container*. This means that the lifecycle of the container's execution is not managed by the orchestrator or scheduler.
+
+The `docker-job` command-line application launches an image by wrapping it in a service and running it. Options are available to determine whether to output the logs when the job has completed, run more than one replica at the same time, and so on.
+
+# Installation
+
+Ensure you actually have a Docker Swarm, as per [](https://docs.docker.com/engine/swarm/swarm-mode/).
+
+Install `docker-job` from GitHub with:
+
+```shell
+npm i -g markbirbeck/docker-job
+```
+
+# Usage
+
 Bare minimum is to provide the name of an image, which will be launched on your local Docker Swarm:
 
 ```shell
