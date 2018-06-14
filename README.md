@@ -10,10 +10,10 @@ The `docker-job` command-line application launches an image by wrapping it in a 
 
 Ensure you actually have a Docker Swarm, as per [](https://docs.docker.com/engine/swarm/swarm-mode/).
 
-Install `docker-job` from GitHub with:
+Install `docker-job` from NPM with:
 
 ```shell
-npm i -g markbirbeck/docker-job
+npm i -g docker-job
 ```
 
 # Usage
