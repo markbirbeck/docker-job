@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.2.1] - 2018-06-14
+### Added
+- Running command fails when trying to update service (#9).
+
 ## [v0.2.0] - 2018-06-13
 ### Added
 - Add CLI script (#3).
@@ -14,5 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add CLI parameters (#1).
 
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.2.1...HEAD
 [v0.2.0]: https://github.com/markbirbeck/docker-job/compare/v0.1.0...v0.2.0
+[v0.2.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.0...v0.2.1
