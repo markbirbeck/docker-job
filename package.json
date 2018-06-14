@@ -1,13 +1,13 @@
 {
   "name": "docker-job",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Run a single job as a Docker Service on Docker Swarm",
   "bin": {
     "dj": "./src/bin/cli.js"
   },
   "dependencies": {
     "command-line-args": "^5.0.2",
-    "docker-engine": "^0.1.1"
+    "docker-engine": "^0.2.2"
   },
   "keywords": [
     "docker",
