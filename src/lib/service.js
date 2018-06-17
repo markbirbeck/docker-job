@@ -98,7 +98,15 @@ const dockerEngine = require('docker-engine');
        */
 
       catch(e) {
-        if (e.message !== 'Not Found') throw e
+        /**
+         * NOTE: There's an oddity here that doing a string comparison always
+         * returns false, but using '.includes()' works ok. So change this with
+         * care!
+         */
+
+        if (!e.message.includes(`service ${name} not found`)) {
+          throw e
+        }
       }
     }
 
