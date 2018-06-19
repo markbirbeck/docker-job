@@ -32,6 +32,40 @@ class Service {
     return await this.client.Service.ServiceInspect({id});
   }
 
+  /**
+   * Run a service:
+   */
+
+  async start(id, replicas) {
+    /**
+     * To update a service we need the current spec and version number:
+     */
+
+    const info = await this.inspect(id);
+    const version = info.Version.Index;
+    const spec = info.Spec;
+
+    /**
+     * Next we create a new spec with a modified replicas value:
+     */
+
+    const taskSpec = {
+      ...spec,
+      Mode: {Replicated: {Replicas: replicas}}
+    };
+
+    /**
+     * Now we can update the service with the new spec:
+     */
+
+    return await this.client.Service
+    .ServiceUpdate({
+      id,
+      body: taskSpec,
+      version: '' + version
+    });
+  }
+
   static get Builder() {
     class Builder {
       constructor(config) {
@@ -203,40 +237,6 @@ class Service {
     });
   };
 
-  /**
-   * Run a service:
-   */
-
-  const startService = async (id, replicas) => {
-    /**
-     * To update a service we need the current spec and version number:
-     */
-
-    const info = await serviceClient.inspect(id);
-    const version = info.Version.Index;
-    const spec = info.Spec;
-
-    /**
-     * Next we create a new spec with a modified replicas value:
-     */
-
-    const taskSpec = {
-      ...spec,
-      Mode: {Replicated: {Replicas: replicas}}
-    };
-
-    /**
-     * Now we can update the service with the new spec:
-     */
-
-    return await serviceClient.client.Service
-    .ServiceUpdate({
-      id,
-      body: taskSpec,
-      version: '' + version
-    });
-  }
-
   const main = async () => {
     let id;
 
@@ -250,7 +250,7 @@ class Service {
     let response;
 
     try {
-      response = await startService(id, options.replicas);
+      response = await serviceClient.start(id, options.replicas);
       console.log(id);
     } catch(e) {
       console.error(`Failed to start service: ${e}`)
