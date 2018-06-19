@@ -8,7 +8,7 @@ The `docker-job` command-line application launches an image by wrapping it in a 
 
 # Installation
 
-Ensure you actually have a Docker Swarm, as per [](https://docs.docker.com/engine/swarm/swarm-mode/).
+Ensure you actually have a Docker Swarm, as per [Run Docker Engine in swarm mode](https://docs.docker.com/engine/swarm/swarm-mode/).
 
 Install `docker-job` from NPM with:
 
