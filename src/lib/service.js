@@ -24,6 +24,14 @@ class Service {
     this.client = builder.engine
   }
 
+  /**
+   * Get info about a service:
+   */
+
+  async inspect(id) {
+    return await this.client.Service.ServiceInspect({id});
+  }
+
   static get Builder() {
     class Builder {
       constructor(config) {
@@ -77,14 +85,6 @@ class Service {
     }
   }
   const serviceClient = await new Service.Builder(config).build()
-
-  /**
-   * Get info about a service:
-   */
-
-  const inspectService = async id => {
-    return await serviceClient.client.Service.ServiceInspect({id});
-  }
 
   /**
    * Get a list of tasks for a service:
@@ -212,7 +212,7 @@ class Service {
      * To update a service we need the current spec and version number:
      */
 
-    const info = await inspectService(id);
+    const info = await serviceClient.inspect(id);
     const version = info.Version.Index;
     const spec = info.Spec;
 
