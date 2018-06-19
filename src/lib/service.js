@@ -19,6 +19,26 @@
 
 const dockerEngine = require('docker-engine');
 
+class Service {
+  constructor(builder) {
+    this.client = builder.engine
+  }
+
+  static get Builder() {
+    class Builder {
+      constructor(config) {
+        this.config = config
+      }
+
+      async build() {
+        this.engine = await dockerEngine(this.config)
+        return new Service(this)
+      }
+    }
+    return Builder
+  }
+}
+
 (async () => {
   const { poll } = require('./poll');
   const options = require('./option-definitions')()
@@ -56,14 +76,14 @@ const dockerEngine = require('docker-engine');
       }
     }
   }
-  const client = await dockerEngine(config)
+  const serviceClient = await new Service.Builder(config).build()
 
   /**
    * Get info about a service:
    */
 
   const inspectService = async id => {
-    return await client.Service.ServiceInspect({id});
+    return await serviceClient.client.Service.ServiceInspect({id});
   }
 
   /**
@@ -71,7 +91,7 @@ const dockerEngine = require('docker-engine');
    */
 
   const taskList = async (id) => {
-    return await client.Task
+    return await serviceClient.client.Task
     .TaskList({
       filters: `{"service": {"${id}": true}}`
     });
@@ -82,7 +102,7 @@ const dockerEngine = require('docker-engine');
    */
 
   const taskState = async (id) => {
-    const state = await client.Task
+    const state = await serviceClient.client.Task
     .TaskInspect({id});
 
     return state.Status.State
@@ -122,7 +142,7 @@ const dockerEngine = require('docker-engine');
        */
 
       try {
-        await client.Service.ServiceInspect({id: name});
+        await serviceClient.client.Service.ServiceInspect({id: name});
         throw new Error('name conflicts with an existing object')
       }
 
@@ -148,7 +168,7 @@ const dockerEngine = require('docker-engine');
      * Otherwise we're good to go:
      */
 
-    const service = await client.Service.ServiceCreate({
+    const service = await serviceClient.client.Service.ServiceCreate({
       body: {
         Name: name,
         ...defaultSpec
@@ -163,7 +183,7 @@ const dockerEngine = require('docker-engine');
    */
 
   const logsService = async id => {
-    return await client.Service
+    return await serviceClient.client.Service
     .ServiceLogs({
       id,
       stdout: true, stderr: true, follow: false
@@ -176,7 +196,7 @@ const dockerEngine = require('docker-engine');
 
   const logsContainer = async id => {
     console.log('About to get logs for container:', id);
-    return await client.Container
+    return await serviceClient.client.Container
     .ContainerLogs({
       id,
       stdout: true, stderr: true, follow: false
@@ -209,7 +229,7 @@ const dockerEngine = require('docker-engine');
      * Now we can update the service with the new spec:
      */
 
-    return await client.Service
+    return await serviceClient.client.Service
     .ServiceUpdate({
       id,
       body: taskSpec,
@@ -258,7 +278,7 @@ const dockerEngine = require('docker-engine');
              */
 
             if (options.showlogs) {
-              const state = await client.Task.TaskInspect({id: task.ID});
+              const state = await serviceClient.client.Task.TaskInspect({id: task.ID});
               const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
 
               console.log(logs)
