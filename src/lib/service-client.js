@@ -84,6 +84,14 @@ class ServiceClient {
   }
 
   /**
+   * Get info about a task:
+   */
+
+  async inspectTask(id) {
+    return await this.client.Task.TaskInspect({id});
+  }
+
+  /**
    * Run a service:
    */
 

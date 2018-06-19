@@ -135,7 +135,7 @@ const ServiceClient = require('./service-client')
              */
 
             if (options.showlogs) {
-              const state = await serviceClient.client.Task.TaskInspect({id: task.ID});
+              const state = await serviceClient.inspectTask(task.ID);
               const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
 
               console.log(logs)
