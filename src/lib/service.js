@@ -81,19 +81,6 @@ const ServiceClient = require('./service-client')
     });
   };
 
-  /**
-   * Access logs for a container:
-   */
-
-  const logsContainer = async id => {
-    console.log('About to get logs for container:', id);
-    return await serviceClient.client.Container
-    .ContainerLogs({
-      id,
-      stdout: true, stderr: true, follow: false
-    });
-  };
-
   const main = async () => {
     let id;
 
@@ -136,7 +123,7 @@ const ServiceClient = require('./service-client')
 
             if (options.showlogs) {
               const state = await serviceClient.inspectTask(task.ID);
-              const logs = await logsContainer(state.Status.ContainerStatus.ContainerID);
+              const logs = await serviceClient.logsContainer(state.Status.ContainerStatus.ContainerID)
 
               console.log(logs)
             }
