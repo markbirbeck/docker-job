@@ -61,6 +61,25 @@ tap.test('cli', t => {
       new Error('Cannot set both --detach and --showlogs'))
     t.end()
   })
+
+  t.test('SSH tunneling', t => {
+    const config = options(
+      (
+        '--ssh-remote /var/run/docker.sock ' +
+        '--ssh-identity-file ./docker-swarm.pem ' +
+        '--ssh-hostname docker@amazonaws.com ' +
+        'hello-world'
+      )
+      .split(' '))
+    t.same(config, {
+      image: 'hello-world',
+      replicas: 1,
+      sshHostname: 'docker@amazonaws.com',
+      sshIdentityFile: './docker-swarm.pem',
+      sshRemote: '/var/run/docker.sock'
+    })
+    t.end()
+  })
   t.end()
 })
 
