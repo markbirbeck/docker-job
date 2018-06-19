@@ -19,47 +19,45 @@
 
 const main = require('./main')
 
-;(async () => {
-  const options = require('./option-definitions')()
-  let config
-  if (options.sshHostname) {
-    /**
-     * Get the hostname and possibly a user name
-     */
+const options = require('./option-definitions')()
+let config
+if (options.sshHostname) {
+  /**
+   * Get the hostname and possibly a user name
+   */
 
-    let [ user, hostname ] = options.sshHostname.split('@')
-    if (!hostname) {
-      hostname = user
-      user = undefined
-    }
-    config = {
-      username: user,
-      host: hostname
-    }
-
-    /**
-     * If their is a private key then read it and add it to the config:
-     */
-
-    if (options.sshIdentityFile) {
-      config.privateKey = require('fs').readFileSync(__dirname + '/' + options.sshIdentityFile, 'utf8')
-    }
-
-    /**
-     * If the remote connection is via a socket then specify it:
-     */
-
-    if (options.sshRemote) {
-      if (options.sshRemote[0] === '/') {
-        config.socketPath = options.sshRemote
-      }
-    }
+  let [ user, hostname ] = options.sshHostname.split('@')
+  if (!hostname) {
+    hostname = user
+    user = undefined
+  }
+  config = {
+    username: user,
+    host: hostname
   }
 
-  try {
-    await main(options, config)
-  } catch(e) {
-    console.error(e)
-    process.exit(-1)
+  /**
+   * If their is a private key then read it and add it to the config:
+   */
+
+  if (options.sshIdentityFile) {
+    config.privateKey = require('fs').readFileSync(__dirname + '/' + options.sshIdentityFile, 'utf8')
   }
-})()
+
+  /**
+   * If the remote connection is via a socket then specify it:
+   */
+
+  if (options.sshRemote) {
+    if (options.sshRemote[0] === '/') {
+      config.socketPath = options.sshRemote
+    }
+  }
+}
+
+try {
+  main(options, config)
+} catch(e) {
+  console.error(e)
+  process.exit(-1)
+}
