@@ -3,57 +3,40 @@ const { poll } = require('./poll');
 
 const main = async (options, config) => {
   const serviceClient = await new ServiceClient.Builder(config).build()
-  let id;
 
-  try {
-    id = await serviceClient.create(options.image, options.name);
-  } catch(e) {
-    throw new Error(`Failed to create service: ${e}`)
-  }
+  const id = await serviceClient.run(options.image, options.replicas, options.name)
+  console.log(id)
 
-  let response;
+  if (!options.detach) {
+    /**
+     * Get a list of the tasks for this service:
+     */
 
-  try {
-    response = await serviceClient.start(id, options.replicas);
-    console.log(id);
-  } catch(e) {
-    throw new Error(`Failed to start service: ${e}`)
-  }
+    const tasks = await serviceClient.taskList(id);
 
-  if (response.Warnings === null) {
-    if (!options.detach) {
-      /**
-       * Get a list of the tasks for this service:
-       */
+    /**
+     * Now poll each task until it has completed:
+     */
 
-      const tasks = await serviceClient.taskList(id);
+    for (const task of tasks) {
+      try {
+        await poll(serviceClient.taskState.bind(serviceClient), task.ID);
 
-      /**
-       * Now poll each task until it has completed:
-       */
+        /**
+         * Once completed get the task's details and use them to get the logs:
+         */
 
-      for (const task of tasks) {
-        try {
-          await poll(serviceClient.taskState.bind(serviceClient), task.ID);
+        if (options.showlogs) {
+          const state = await serviceClient.inspectTask(task.ID);
+          const logs = await serviceClient.logsContainer(state.Status.ContainerStatus.ContainerID)
 
-          /**
-           * Once completed get the task's details and use them to get the logs:
-           */
-
-          if (options.showlogs) {
-            const state = await serviceClient.inspectTask(task.ID);
-            const logs = await serviceClient.logsContainer(state.Status.ContainerStatus.ContainerID)
-
-            console.log(logs)
-          }
-        } catch(e) {
-          process.exitCode = -1
-          console.error(`${task.ID}: ${e.message}`)
+          console.log(logs)
         }
+      } catch(e) {
+        process.exitCode = -1
+        console.error(`${task.ID}: ${e.message}`)
       }
     }
-  } else {
-    throw new Error(response);
   }
 }
 

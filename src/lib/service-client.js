@@ -117,6 +117,30 @@ class ServiceClient {
   }
 
   /**
+   * Run an image as a service:
+   */
+
+  async run(image, replicas, name) {
+    let id
+    try {
+      id = await this.create(image, name)
+    } catch(e) {
+      throw new Error(`Failed to create service: ${e}`)
+    }
+
+    let response
+    try {
+      response = await this.start(id, replicas)
+    } catch(e) {
+      throw new Error(`Failed to start service: ${e}`)
+    }
+
+    if (response.Warnings !== null) throw new Error(response)
+
+    return id
+  }
+
+  /**
    * Run a service:
    */
 
