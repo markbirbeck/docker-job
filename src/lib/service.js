@@ -55,9 +55,4 @@ if (options.sshHostname) {
   }
 }
 
-try {
-  main(options, config)
-} catch(e) {
-  console.error(e)
-  process.exit(-1)
-}
+main(options, config)
