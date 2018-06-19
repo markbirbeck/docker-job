@@ -8,8 +8,7 @@ const main = async (options, config) => {
   try {
     id = await serviceClient.create(options.image, options.name);
   } catch(e) {
-    console.error(`Failed to create service: ${e}`)
-    process.exit(-1)
+    throw new Error(`Failed to create service: ${e}`)
   }
 
   let response;
@@ -18,8 +17,7 @@ const main = async (options, config) => {
     response = await serviceClient.start(id, options.replicas);
     console.log(id);
   } catch(e) {
-    console.error(`Failed to start service: ${e}`)
-    process.exit(-1)
+    throw new Error(`Failed to start service: ${e}`)
   }
 
   if (response.Warnings === null) {

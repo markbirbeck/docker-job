@@ -56,5 +56,10 @@ const main = require('./main')
     }
   }
 
-  await main(options, config)
+  try {
+    await main(options, config)
+  } catch(e) {
+    console.error(e)
+    process.exit(-1)
+  }
 })()
