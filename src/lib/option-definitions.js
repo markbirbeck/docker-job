@@ -1,13 +1,4 @@
 const commandLineArgs = require('command-line-args')
-
-/**
- * dj \
- *   --ssh-remote /var/run/docker.sock \
- *   --ssh-identify-file ./docker-swarm.pem \
- *   --ssh-hostname docker@ec2-54-183-237-159.us-west.compute-1.amazonaws.com \
- *     hello-world
- */
-
 const optionDefinitions = [
   { name: 'detach', alias: 'd', type: Boolean },
   { name: 'name', type: String },
