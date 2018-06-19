@@ -3,6 +3,7 @@ const optionDefinitions = [
   { name: 'detach', alias: 'd', type: Boolean },
   { name: 'name', type: String },
   { name: 'replicas', type: Number, defaultValue: 1 },
+  { name: 'repeat-until', type: String },
   { name: 'showlogs', type: Boolean },
   { name: 'ssh-identity-file', type: String },
   { name: 'ssh-remote', type: String },
