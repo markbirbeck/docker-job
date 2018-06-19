@@ -117,6 +117,17 @@ class ServiceClient {
     });
   }
 
+  /**
+   * Get a list of tasks for a service:
+   */
+
+  async taskList(id) {
+    return await this.client.Task
+    .TaskList({
+      filters: `{"service": {"${id}": true}}`
+    })
+  }
+
   static get Builder() {
     class Builder {
       constructor(config) {

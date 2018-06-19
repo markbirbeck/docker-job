@@ -59,17 +59,6 @@ const ServiceClient = require('./service-client')
   const serviceClient = await new ServiceClient.Builder(config).build()
 
   /**
-   * Get a list of tasks for a service:
-   */
-
-  const taskList = async (id) => {
-    return await serviceClient.client.Task
-    .TaskList({
-      filters: `{"service": {"${id}": true}}`
-    });
-  }
-
-  /**
    * Get the state of a task:
    */
 
@@ -131,7 +120,7 @@ const ServiceClient = require('./service-client')
          * Get a list of the tasks for this service:
          */
 
-        const tasks = await taskList(id);
+        const tasks = await serviceClient.taskList(id);
 
         /**
          * Now poll each task until it has completed:
