@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add options to enable selection of tunneling (#17).
 
 ## [v0.2.1] - 2018-06-14
-### Added
+### Fixed
 - Running command fails when trying to update service (#9).
 
 ## [v0.2.0] - 2018-06-13
