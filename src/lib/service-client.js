@@ -1,4 +1,5 @@
 const dockerEngine = require('docker-engine')
+const { poll } = require('./poll')
 
 class ServiceClient {
   constructor(builder) {
@@ -114,6 +115,32 @@ class ServiceClient {
       id,
       stdout: true, stderr: true, follow: false
     })
+  }
+
+  /**
+   * Poll a service until all of its tasks are complete:
+   */
+
+  async poll(id, cb) {
+    /**
+     * Get a list of the tasks for this service:
+     */
+
+    const tasks = await this.taskList(id)
+
+    /**
+     * Now poll each task until it has completed:
+     */
+
+    for (const task of tasks) {
+      try {
+        await poll(this.taskState.bind(this), task.ID)
+        await cb(task)
+      } catch(e) {
+        process.exitCode = -1
+        console.error(`${task.ID}: ${e.message}`)
+      }
+    }
   }
 
   /**
