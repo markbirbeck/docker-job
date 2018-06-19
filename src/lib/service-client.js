@@ -92,6 +92,18 @@ class ServiceClient {
   }
 
   /**
+   * Access logs for a service:
+   */
+
+  async logs(id) {
+    return await this.client.Service
+    .ServiceLogs({
+      id,
+      stdout: true, stderr: true, follow: false
+    })
+  }
+
+  /**
    * Access logs for a container:
    */
 

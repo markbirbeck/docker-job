@@ -69,18 +69,6 @@ const ServiceClient = require('./service-client')
     return state.Status.State
   }
 
-  /**
-   * Access logs for a service:
-   */
-
-  const logsService = async id => {
-    return await serviceClient.client.Service
-    .ServiceLogs({
-      id,
-      stdout: true, stderr: true, follow: false
-    });
-  };
-
   const main = async () => {
     let id;
 
