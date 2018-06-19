@@ -161,6 +161,16 @@ class ServiceClient {
     })
   }
 
+  /**
+   * Get the state of a task:
+   */
+
+  async taskState(id) {
+    const state = await this.inspectTask(id)
+
+    return state.Status.State
+  }
+
   static get Builder() {
     class Builder {
       constructor(config) {

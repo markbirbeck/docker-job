@@ -58,17 +58,6 @@ const ServiceClient = require('./service-client')
   }
   const serviceClient = await new ServiceClient.Builder(config).build()
 
-  /**
-   * Get the state of a task:
-   */
-
-  const taskState = async (id) => {
-    const state = await serviceClient.client.Task
-    .TaskInspect({id});
-
-    return state.Status.State
-  }
-
   const main = async () => {
     let id;
 
@@ -103,7 +92,7 @@ const ServiceClient = require('./service-client')
 
         for (const task of tasks) {
           try {
-            await poll(taskState, task.ID);
+            await poll(serviceClient.taskState.bind(serviceClient), task.ID);
 
             /**
              * Once completed get the task's details and use them to get the logs:
