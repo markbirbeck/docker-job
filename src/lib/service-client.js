@@ -109,7 +109,6 @@ class ServiceClient {
    */
 
   async logsContainer(id) {
-    console.log('About to get logs for container:', id)
     return await this.client.Container
     .ContainerLogs({
       id,
@@ -122,25 +121,46 @@ class ServiceClient {
    */
 
   async poll(id, cb) {
-    /**
-     * Get a list of the tasks for this service:
-     */
+    let foundTask = false
 
-    const tasks = await this.taskList(id)
+    do {
+      /**
+       * Get a list of the tasks for this service:
+       */
 
-    /**
-     * Now poll each task until it has completed:
-     */
+      const tasks = await this.taskList(id)
 
-    for (const task of tasks) {
-      try {
-        await poll(this.taskState.bind(this), task.ID)
-        await cb(task)
-      } catch(e) {
-        process.exitCode = -1
-        console.error(`${task.ID}: ${e.message}`)
+      for (const task of tasks) {
+        /**
+         * Since old tasks will be in the list we need to check for a
+         * matching ForceUpdate value to find the most recent:
+         */
+
+        if (task.Spec.ForceUpdate !== this.forceUpdate) {
+          continue
+        }
+
+        /**
+         * However, it's possible that the last task run is not yet in
+         * the list, so we also need to be prepared to try again. We do
+         * this by tracking with a 'foundTask' flag:
+         */
+
+        foundTask = true
+
+        /**
+         * If we found the latest task then we can now do the polling:
+         */
+
+        try {
+          await poll(this.taskState.bind(this), task.ID)
+          await cb(task)
+        } catch(e) {
+          process.exitCode = -1
+          console.error(`${task.ID}: ${e.message}`)
+        }
       }
-    }
+    } while (!foundTask)
   }
 
   /**
@@ -188,6 +208,20 @@ class ServiceClient {
       ...spec,
       Mode: {Replicated: {Replicas: replicas}}
     };
+
+    /**
+     * To ensure that the update is processed by the Swarm we need to increment
+     * the ForceUpdate value:
+     */
+
+    ++taskSpec.TaskTemplate.ForceUpdate
+
+    /**
+     * Finally, keep track of this value for later when we're trying to find
+     * the last task that ran:
+     */
+
+    this.forceUpdate = taskSpec.TaskTemplate.ForceUpdate
 
     /**
      * Now we can update the service with the new spec:
