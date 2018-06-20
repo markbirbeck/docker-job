@@ -109,7 +109,6 @@ class ServiceClient {
    */
 
   async logsContainer(id) {
-    console.log('About to get logs for container:', id)
     return await this.client.Container
     .ContainerLogs({
       id,
