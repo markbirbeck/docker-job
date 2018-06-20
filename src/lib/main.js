@@ -2,11 +2,28 @@ const ServiceClient = require('./service-client')
 
 const main = async (options, config) => {
   const serviceClient = await new ServiceClient.Builder(config).build()
-  let shouldRepeat = false
+  let id;
+
+  try {
+    id = await serviceClient.create(options.image, options.name)
+  } catch(e) {
+    throw new Error(`Failed to create service: ${e}`)
+  }
+  console.log(id)
+
+  let shouldRepeat
 
   do {
-    const id = await serviceClient.run(options.image, options.replicas, options.name)
-    console.log(id)
+    shouldRepeat = false
+    let response
+
+    try {
+      response = await serviceClient.start(id, options.replicas)
+    } catch(e) {
+      throw new Error(`Failed to start service: ${e}`)
+    }
+
+    if (response.Warnings !== null) throw new Error(response)
 
     if (!options.detach) {
       await serviceClient.poll(id, async task => {
