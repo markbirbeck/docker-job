@@ -132,6 +132,15 @@ class ServiceClient {
      */
 
     for (const task of tasks) {
+      /**
+       * Since old tasks will be in the list we need to check for a
+       * matching ForceUpdate value to find the most recent:
+       */
+
+      if (task.Spec.ForceUpdate !== this.forceUpdate) {
+        continue
+      }
+
       try {
         await poll(this.taskState.bind(this), task.ID)
         await cb(task)
@@ -194,6 +203,13 @@ class ServiceClient {
      */
 
     ++taskSpec.TaskTemplate.ForceUpdate
+
+    /**
+     * Finally, keep track of this value for later when we're trying to find
+     * the last task that ran:
+     */
+
+    this.forceUpdate = taskSpec.TaskTemplate.ForceUpdate
 
     /**
      * Now we can update the service with the new spec:
