@@ -189,6 +189,13 @@ class ServiceClient {
     };
 
     /**
+     * To ensure that the update is processed by the Swarm we need to increment
+     * the ForceUpdate value:
+     */
+
+    ++taskSpec.TaskTemplate.ForceUpdate
+
+    /**
      * Now we can update the service with the new spec:
      */
 
