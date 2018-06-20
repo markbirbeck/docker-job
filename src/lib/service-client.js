@@ -121,34 +121,46 @@ class ServiceClient {
    */
 
   async poll(id, cb) {
-    /**
-     * Get a list of the tasks for this service:
-     */
+    let foundTask = false
 
-    const tasks = await this.taskList(id)
-
-    /**
-     * Now poll each task until it has completed:
-     */
-
-    for (const task of tasks) {
+    do {
       /**
-       * Since old tasks will be in the list we need to check for a
-       * matching ForceUpdate value to find the most recent:
+       * Get a list of the tasks for this service:
        */
 
-      if (task.Spec.ForceUpdate !== this.forceUpdate) {
-        continue
-      }
+      const tasks = await this.taskList(id)
 
-      try {
-        await poll(this.taskState.bind(this), task.ID)
-        await cb(task)
-      } catch(e) {
-        process.exitCode = -1
-        console.error(`${task.ID}: ${e.message}`)
+      for (const task of tasks) {
+        /**
+         * Since old tasks will be in the list we need to check for a
+         * matching ForceUpdate value to find the most recent:
+         */
+
+        if (task.Spec.ForceUpdate !== this.forceUpdate) {
+          continue
+        }
+
+        /**
+         * However, it's possible that the last task run is not yet in
+         * the list, so we also need to be prepared to try again. We do
+         * this by tracking with a 'foundTask' flag:
+         */
+
+        foundTask = true
+
+        /**
+         * If we found the latest task then we can now do the polling:
+         */
+
+        try {
+          await poll(this.taskState.bind(this), task.ID)
+          await cb(task)
+        } catch(e) {
+          process.exitCode = -1
+          console.error(`${task.ID}: ${e.message}`)
+        }
       }
-    }
+    } while (!foundTask)
   }
 
   /**
