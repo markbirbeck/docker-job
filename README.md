@@ -44,6 +44,22 @@ dj --replicas 5 hello-world
 
 Again, the `--showlogs` option can be used to show the logs at the end, as each instance finishes. (This is different to the way `docker service logs` behaves, where the logs from each instance are interleaved by time.)
 
+To run the job *repeatedly* until some condition is met, use `--repeat-until` with a regular expression:
+
+```shell
+dj --showlogs --repeat-until 'workflows?' hello-world
+```
+
+When the job has finished running the logs are checked and the presence of 'workflow'--optionally followed by an 's'--*anywhere* in the logs will prevent `docker-job` from running the job again.
+
+The logs can be shown on each iteration, and more than one replica can be run:
+
+```shell
+dj --showlogs --replicas 5 --repeat-until 'workflows?' hello-world
+```
+
+The sequence will terminate if *any* of the replicas outputs a string that matches the regular expression provided.
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
