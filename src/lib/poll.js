@@ -12,14 +12,25 @@ const poll = (fn, id, delay=500) => {
           resolve(state)
           break;
 
+        case 'failed':
+          reject(new Error('The task exited with an error code.'))
+          break
+
         case 'rejected':
           reject(new Error('Unable to launch service due to bad paramters. Check the image exists.'))
           break
 
+        case 'orphaned':
+          reject(new Error('The node was down too long.'))
+          break
+
+        case 'accepted':
         case 'assigned':
+        case 'new':
         case 'pending':
         case 'preparing':
         case 'ready':
+        case 'remove':
         case 'running':
         case 'shutdown':
         case 'starting':
