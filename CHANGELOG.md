@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [v0.4.0] - 2018-06-20
+## [v0.4.1] - 2018-06-20
 ### Added
 - Add option to repeat a job until/while a condition exists (#14).
+- When repeating tasks, relaunch job rather than creating new one (#21).
+### Fixed
+- Unknown states cause run to exit (#11).
 
 ## [v0.3.1] - 2018-06-19
 ### Added
@@ -30,4 +33,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.2.0]: https://github.com/markbirbeck/docker-job/compare/v0.1.0...v0.2.0
 [v0.2.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.0...v0.2.1
 [v0.3.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.1...v0.3.1
-[v0.4.0]: https://github.com/markbirbeck/docker-job/compare/v0.3.1...v0.4.0
+[v0.4.1]: https://github.com/markbirbeck/docker-job/compare/v0.3.1...v0.4.1
