@@ -5,7 +5,7 @@ const main = async (options, config) => {
   let id;
 
   try {
-    id = await serviceClient.create(options.image, options.name)
+    id = await serviceClient.create(options.image, options.args, options.name)
   } catch(e) {
     throw new Error(`Failed to create service: ${e}`)
   }
