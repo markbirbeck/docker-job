@@ -24,6 +24,12 @@ Bare minimum is to provide the name of an image, which will be launched on your 
 dj hello-world
 ```
 
+Any parameters after the image name will be passed to the launched job:
+
+```shell
+dh alpine echo hello world
+```
+
 The app will provide an identifier for the service, and then wait until it completes before exiting. To show the logs on exit use the `--showlogs` option:
 
 ```shell
@@ -47,10 +53,10 @@ Again, the `--showlogs` option can be used to show the logs at the end, as each 
 To run the job *repeatedly* until some condition is met, use `--repeat-until` with a regular expression:
 
 ```shell
-dj --showlogs --repeat-until 'workflows?' hello-world
+dj --showlogs --repeat-until '20:0[05]' alpine date
 ```
 
-When the job has finished running the logs are checked and the presence of 'workflow'--optionally followed by an 's'--*anywhere* in the logs will prevent `docker-job` from running the job again.
+When the job has finished running the logs are checked and the presence of '20:00' or '20:05' *anywhere* in the logs will prevent `docker-job` from running the job again.
 
 The logs can be shown on each iteration, and more than one replica can be run:
 
