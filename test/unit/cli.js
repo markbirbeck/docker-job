@@ -80,6 +80,25 @@ tap.test('cli', t => {
     })
     t.end()
   })
+
+  t.test('args for image', t => {
+    const config = options(
+      (
+        '--showlogs ' +
+        '--repeat-until done ' +
+        '--replicas 2 ' +
+        'alpine date'
+      )
+      .split(' '))
+    t.same(config, {
+      image: 'alpine',
+      args: ['date'],
+      repeatUntil: 'done',
+      replicas: 2,
+      showlogs: true
+    })
+    t.end()
+  })
   t.end()
 })
 
