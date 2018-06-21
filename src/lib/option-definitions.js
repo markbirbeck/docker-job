@@ -12,10 +12,35 @@ const optionDefinitions = [
 ]
 
 const options = (argv) => {
-  const config = commandLineArgs(optionDefinitions, { argv, camelCase: true })
+  const config = commandLineArgs(optionDefinitions, { argv, camelCase: true,
+    stopAtFirstUnknown: true })
 
   if (config.detach && config.showlogs) {
     throw new Error('Cannot set both --detach and --showlogs')
+  }
+
+  /**
+   * If there are values in the 'unknown' bucket...
+   */
+
+  if (config._unknown) {
+
+    /**
+     * ...then either we have unknown options (which is an error)...
+     */
+
+    if (!config.image) {
+      throw new Error(`UNKNOWN_OPTION: Unknown option: ${config._unknown[0]}`)
+    }
+
+    /**
+     * ...or we have some parameters to pass to the image:
+     */
+
+    config.args = config._unknown
+    delete config._unknown
+  } else {
+    config.args = []
   }
   return config
 }
