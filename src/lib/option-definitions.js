@@ -6,6 +6,7 @@ const optionDefinitions = [
   { name: 'replicas', type: Number, defaultValue: 1 },
   { name: 'repeat-until', type: String },
   { name: 'repeat-while', type: String },
+  { name: 'rm', type: Boolean },
   { name: 'showlogs', type: Boolean },
   { name: 'ssh-identity-file', type: String },
   { name: 'ssh-remote', type: String },
