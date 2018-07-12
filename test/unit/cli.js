@@ -122,6 +122,17 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('rm', t => {
+    const config = options('--rm hello-world'.split(' '))
+    t.same(config, {
+      args: [],
+      replicas: 1,
+      rm: true,
+      image: 'hello-world'
+    })
+    t.end()
+  })
+
   t.test('SSH tunneling', t => {
     const config = options(
       (
