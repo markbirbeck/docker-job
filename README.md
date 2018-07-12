@@ -66,6 +66,36 @@ dj --showlogs --replicas 5 --repeat-until 'workflows?' hello-world
 
 The sequence will terminate if *any* of the replicas outputs a string that matches the regular expression provided.
 
+To repeat a job as long as some string exists in the logs, then use the `--repeat-while` option. The following example will run as long as the time is 8pm and any number of seconds:
+
+```shell
+dj --repeat-while '20:00:\d\d' alpine date
+```
+
+When a job has finished the service that supports it can be removed automatically with the `--rm` option:
+
+```shell
+dj --rm --repeat-while '20:00:\d\d' alpine date
+```
+
+To map a volume use `--volume` or `-v`:
+
+```shell
+dj -v /var/run/docker.sock:/var/run/docker.sock \
+  tmaier/docker-compose docker-compose up
+```
+
+To provide one or more environment variables use `--env` or `-e`:
+
+```shell
+dj \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --env DBHOST=server \
+  --env DBPASS=xyz \
+  tmaier/docker-compose \
+    docker-compose up
+```
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
