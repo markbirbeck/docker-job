@@ -10,13 +10,28 @@ class ServiceClient {
    * Create a service:
    */
 
-  async create(image, args, name, env) {
+  async create(image, args, name, env, volume) {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
           Image: image,
           Args: args,
-          Env: env
+          Env: env,
+          Mounts: volume.map(
+            v => {
+              const [Source, Target] = v.split(':')
+
+              if (!Target) {
+                throw new Error('Only bound volumes are supported')
+              }
+
+              return {
+                Source,
+                Target,
+                type: 'bind'
+              }
+            }
+          )
         },
         RestartPolicy: {
           Condition: 'none'
