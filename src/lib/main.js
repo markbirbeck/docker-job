@@ -32,7 +32,7 @@ const main = async (options, config) => {
          */
 
         let logs
-        if (options.showlogs || options.repeatUntil) {
+        if (options.showlogs || options.repeatUntil || options.repeatWhile) {
           const state = await serviceClient.inspectTask(task.ID)
           logs = await serviceClient.logsContainer(state.Status.ContainerStatus.ContainerID)
         }
@@ -42,14 +42,16 @@ const main = async (options, config) => {
         }
 
         /**
-         * If the task is to be repeated until a certain string is found then
-         * check for that in the logs:
+         * If the task is to be repeated until a certain string is found (or whilst
+         * a certain string is *not* found) then check for that in the logs:
          */
 
-        if (options.repeatUntil) {
-          const re = new RegExp(options.repeatUntil)
+        const repeat = options.repeatUntil || options.repeatWhile
+        if (repeat) {
+          const until = options.repeatUntil ? true : false
+          const re = new RegExp(repeat)
           const m = logs.match(re)
-          if (!m) {
+          if (until ? !m : m) {
             shouldRepeat = true
           }
         }
