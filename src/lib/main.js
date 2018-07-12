@@ -1,6 +1,10 @@
 const ServiceClient = require('./service-client')
 
 const main = async (options, config) => {
+  if (options.host) {
+    process.env.DOCKER_HOST = options.host
+  }
+
   const serviceClient = await new ServiceClient.Builder(config).build()
   let id;
 
