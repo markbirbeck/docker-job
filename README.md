@@ -78,6 +78,13 @@ When a job has finished the service that supports it can be removed automaticall
 dj --rm --repeat-while '20:00:\d\d' alpine date
 ```
 
+To map a volume use `--volume` or `-v`:
+
+```shell
+dj -v /var/run/docker.sock:/var/run/docker.sock \
+  tmaier/docker-compose docker-compose up
+```
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
