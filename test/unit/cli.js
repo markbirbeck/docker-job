@@ -117,6 +117,36 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('volume', t => {
+    t.test('single option', t => {
+      const config = options('--volume /var/run/docker.sock:/var/run/docker.sock hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        volume: [
+          '/var/run/docker.sock:/var/run/docker.sock'
+        ],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+
+    t.test('multiple options', t => {
+      const config = options('-v /var/run/docker.sock:/var/run/docker.sock --volume myvolume hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        volume: [
+          '/var/run/docker.sock:/var/run/docker.sock',
+          'myvolume'
+        ],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+    t.end()
+  })
+
   t.test('args for image', t => {
     const config = options(
       (
