@@ -108,6 +108,17 @@ tap.test('cli', t => {
       })
       t.end()
     })
+
+    t.test('while', t => {
+      const config = options('--repeat-while notdone hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        repeatWhile: 'notdone',
+        image: 'hello-world'
+      })
+      t.end()
+    })
     t.end()
   })
 
