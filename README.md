@@ -96,6 +96,14 @@ dj \
     docker-compose up
 ```
 
+To use a different host, set `-H` or --`host`:
+
+```shell
+dj -H http://swarm:2375 --rm hello-world
+```
+
+Note that for the moment the value must include the protocol and port.
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
