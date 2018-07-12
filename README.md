@@ -72,6 +72,12 @@ To repeat a job as long as some string exists in the logs, then use the `--repea
 dj --repeat-while '20:00:\d\d' alpine date
 ```
 
+When a job has finished the service that supports it can be removed automatically with the `--rm` option:
+
+```shell
+dj --rm --repeat-while '20:00:\d\d' alpine date
+```
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
