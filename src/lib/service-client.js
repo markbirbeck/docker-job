@@ -17,7 +17,7 @@ class ServiceClient {
           Image: image,
           Args: args,
           Env: env,
-          Mounts: volume.map(
+          Mounts: volume && volume.map(
             v => {
               const [Source, Target] = v.split(':')
 
