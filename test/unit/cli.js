@@ -97,6 +97,20 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('repeat', t => {
+    t.test('until', t => {
+      const config = options('--repeat-until done hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        repeatUntil: 'done',
+        image: 'hello-world'
+      })
+      t.end()
+    })
+    t.end()
+  })
+
   t.test('SSH tunneling', t => {
     const config = options(
       (
