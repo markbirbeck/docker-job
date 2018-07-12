@@ -94,6 +94,14 @@ class ServiceClient {
   }
 
   /**
+   * Delete a service:
+   */
+
+  delete(id) {
+    return this.client.Service.ServiceDelete({id});
+  }
+
+  /**
    * Get info about a service:
    */
 
