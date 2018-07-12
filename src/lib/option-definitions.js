@@ -1,6 +1,7 @@
 const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
   { name: 'detach', alias: 'd', type: Boolean },
+  { name: 'env', alias: 'e', type: String, lazyMultiple: true },
   { name: 'name', type: String },
   { name: 'replicas', type: Number, defaultValue: 1 },
   { name: 'repeat-until', type: String },
