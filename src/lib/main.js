@@ -58,6 +58,14 @@ const main = async (options, config) => {
       })
     }
   } while (shouldRepeat)
+
+  if (options.rm) {
+    try {
+      await serviceClient.delete(id)
+    } catch(e) {
+      throw new Error(`Failed to delete service: ${e}`)
+    }
+  }
 }
 
 module.exports = main
