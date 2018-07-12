@@ -9,6 +9,7 @@ const optionDefinitions = [
   { name: 'ssh-identity-file', type: String },
   { name: 'ssh-remote', type: String },
   { name: 'ssh-hostname', type: String },
+  { name: 'volume', alias: 'v', type: String, lazyMultiple: true },
   { name: 'image', type: String, defaultOption: true }
 ]
 
