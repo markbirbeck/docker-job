@@ -10,12 +10,13 @@ class ServiceClient {
    * Create a service:
    */
 
-  async create(image, args, name) {
+  async create(image, args, name, env) {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
           Image: image,
-          Args: args
+          Args: args,
+          Env: env
         },
         RestartPolicy: {
           Condition: 'none'

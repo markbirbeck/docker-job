@@ -39,6 +39,36 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('env', t => {
+    t.test('single option', t => {
+      const config = options('--env VAR=value hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        env: [
+          'VAR=value'
+        ],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+
+    t.test('multiple options', t => {
+      const config = options('--env VAR1=value1 -e VAR2=value2 hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        env: [
+          'VAR1=value1',
+          'VAR2=value2'
+        ],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+    t.end()
+  })
+
   t.test('logs', t => {
     const config = options('--showlogs hello-world'.split(' '))
     t.same(config, {
