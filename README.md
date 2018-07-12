@@ -85,6 +85,17 @@ dj -v /var/run/docker.sock:/var/run/docker.sock \
   tmaier/docker-compose docker-compose up
 ```
 
+To provide one or more environment variables use `--env` or `-e`:
+
+```shell
+dj \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --env DBHOST=server \
+  --env DBPASS=xyz \
+  tmaier/docker-compose \
+    docker-compose up
+```
+
 ## Swarm on AWS
 
 To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` options. For example:
