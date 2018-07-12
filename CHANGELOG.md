@@ -40,10 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add CLI parameters (#1).
 
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.6.0...HEAD
 [v0.2.0]: https://github.com/markbirbeck/docker-job/compare/v0.1.0...v0.2.0
 [v0.2.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.0...v0.2.1
 [v0.3.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.1...v0.3.1
 [v0.4.1]: https://github.com/markbirbeck/docker-job/compare/v0.3.1...v0.4.1
 [v0.5.0]: https://github.com/markbirbeck/docker-job/compare/v0.4.1...v0.5.0
 [v0.6.0]: https://github.com/markbirbeck/docker-job/compare/v0.5.0...v0.6.0
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.6.0...HEAD
