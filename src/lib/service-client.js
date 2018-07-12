@@ -20,6 +20,11 @@ class ServiceClient {
           Mounts: volume.map(
             v => {
               const [Source, Target] = v.split(':')
+
+              if (!Target) {
+                throw new Error('Only bound volumes are supported')
+              }
+
               return {
                 Source,
                 Target,
