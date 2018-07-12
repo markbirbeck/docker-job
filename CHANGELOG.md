@@ -6,13 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.6.0] - 2018-07-12
+### Added
+- Add option to remove service when complete (#5).
+- Add option to pass environment variables to service (#31).
+- Add option to pass volume mapping to a service (#32).
+- Add option to repeat a job while a condition exists (#36).
+
 ## [v0.5.0] - 2018-06-21
 ### Added
 - Pass parameters after the image through as arguments (#25).
 
 ## [v0.4.1] - 2018-06-20
 ### Added
-- Add option to repeat a job until/while a condition exists (#14).
+- Add option to repeat a job until a condition exists (#14).
 - When repeating tasks, relaunch job rather than creating new one (#21).
 ### Fixed
 - Unknown states cause run to exit (#11).
@@ -33,9 +40,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add CLI parameters (#1).
 
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.6.0...HEAD
 [v0.2.0]: https://github.com/markbirbeck/docker-job/compare/v0.1.0...v0.2.0
 [v0.2.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.0...v0.2.1
 [v0.3.1]: https://github.com/markbirbeck/docker-job/compare/v0.2.1...v0.3.1
 [v0.4.1]: https://github.com/markbirbeck/docker-job/compare/v0.3.1...v0.4.1
 [v0.5.0]: https://github.com/markbirbeck/docker-job/compare/v0.4.1...v0.5.0
+[v0.6.0]: https://github.com/markbirbeck/docker-job/compare/v0.5.0...v0.6.0
