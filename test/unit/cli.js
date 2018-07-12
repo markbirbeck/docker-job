@@ -69,6 +69,17 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('host', t => {
+    const config = options('-H swarm hello-world'.split(' '))
+    t.same(config, {
+      args: [],
+      replicas: 1,
+      host: 'swarm',
+      image: 'hello-world'
+    })
+    t.end()
+  })
+
   t.test('logs', t => {
     const config = options('--showlogs hello-world'.split(' '))
     t.same(config, {
