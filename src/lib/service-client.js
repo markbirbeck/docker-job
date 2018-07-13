@@ -142,6 +142,23 @@ class ServiceClient {
   }
 
   /**
+   * Access logs for a task:
+   */
+
+  async logsTask(id) {
+    /**
+     * Note that this is not on the 'Task' object since it's still flagged
+     * as experimental:
+     */
+
+    return await this.client.default
+    .TaskLogs({
+      id,
+      stdout: true, stderr: true, follow: false
+    })
+  }
+
+  /**
    * Poll a service until all of its tasks are complete:
    */
 

@@ -37,8 +37,7 @@ const main = async (options, config) => {
 
         let logs
         if (options.showlogs || options.repeatUntil || options.repeatWhile) {
-          const state = await serviceClient.inspectTask(task.ID)
-          logs = await serviceClient.logsContainer(state.Status.ContainerStatus.ContainerID)
+          logs = await serviceClient.logsTask(task.ID)
         }
 
         if (options.showlogs) {
