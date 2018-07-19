@@ -199,7 +199,13 @@ class ServiceClient {
           await cb(task)
         } catch(e) {
           process.exitCode = -1
-          console.error(`${task.ID}: ${e.message}`)
+          /**
+           * If we've had an error then get the task's status for the error
+           * message:
+           */
+
+          const state = await this.inspectTask(task.ID)
+          console.error(`${task.ID}: ${e.message}: "${state.Status.Err} (${state.Status.State})"`)
         }
       }
     } while (!foundTask)
