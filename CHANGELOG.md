@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.8.0] - 2018-07-19
+### Added
+- Output details of any error on task failure (#46).
+
 ## [v0.7.1] - 2018-07-13
 ### Fixed
 - Unable to obtain logs on remote swarm (#44).
@@ -56,4 +60,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.6.0]: https://github.com/markbirbeck/docker-job/compare/v0.5.0...v0.6.0
 [v0.7.0]: https://github.com/markbirbeck/docker-job/compare/v0.6.0...v0.7.0
 [v0.7.1]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.7.1
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.7.1...HEAD
+[v0.8.0]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.8.0
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.8.0...HEAD
