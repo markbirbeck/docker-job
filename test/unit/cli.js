@@ -25,8 +25,10 @@ tap.test('cli', t => {
         args: [],
         replicas: 1,
         config: [{
+          gid: '0',
           source: 'foo3.sh',
-          target: '/foo3.sh'
+          target: '/foo3.sh',
+          uid: '0'
         }],
         image: 'hello-world'
       })
@@ -39,12 +41,14 @@ tap.test('cli', t => {
         args: [],
         replicas: 1,
         config: [{
+          gid: '0',
           /**
            * 'src' and 'source' are equivalent:
            */
 
           source: 'foo.sh',
-          target: '/usr/src/app/bar.sh'
+          target: '/usr/src/app/bar.sh',
+          uid: '0'
         }],
         image: 'hello-world'
       })
@@ -57,9 +61,11 @@ tap.test('cli', t => {
         args: [],
         replicas: 1,
         config: [{
+          gid: '0',
           source: 'foo2.sh',
           target: '/usr/src/app/bar2.sh',
-          mode: 292
+          mode: 292,
+          uid: '0'
         }],
         image: 'hello-world'
       })
