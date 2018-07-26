@@ -95,6 +95,26 @@ dj \
     cat /usr/src/app/bar.sh
 ```
 
+The source can also be expressed with 'source':
+
+```shell
+dj \
+  --showlogs \
+  --config source=foo.sh,target=/usr/src/app/bar.sh \
+  alpine \
+    cat /usr/src/app/bar.sh
+```
+
+and if no name/value pairs are present the *entire* string is treated as the source:
+
+```shell
+dj \
+  --showlogs \
+  --config foo.sh \
+  alpine \
+    cat /foo.sh
+```
+
 To provide one or more environment variables use `--env` or `-e`:
 
 ```shell
