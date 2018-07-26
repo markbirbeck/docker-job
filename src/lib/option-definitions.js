@@ -58,6 +58,18 @@ class ConfigParams extends Params {
     if (!this.target) {
       this.target = `/${this.source}`
     }
+
+    /**
+     * The 'gid' and 'uid' values default to '0' (a string):
+     */
+
+    if (!this.gid) {
+      this.gid = '0'
+    }
+
+    if (!this.uid) {
+      this.uid = '0'
+    }
   }
 }
 
