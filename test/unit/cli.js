@@ -71,6 +71,22 @@ tap.test('cli', t => {
       })
       t.end()
     })
+
+    t.test('source and gid', t => {
+      const config = options('--config gid=100,uid=1000,source=foo2.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          gid: '100',
+          source: 'foo2.sh',
+          target: '/foo2.sh',
+          uid: '1000'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
     t.end()
   })
 
