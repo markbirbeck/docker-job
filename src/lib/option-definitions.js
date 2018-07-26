@@ -1,6 +1,24 @@
+const querystring = require('querystring')
 const commandLineArgs = require('command-line-args')
+
+class Params {
+  constructor(s) {
+    /**
+     * Parse the parameter as a set of comma-separated name/value
+     * pairs:
+     */
+
+    const params = querystring.parse(s, ',')
+
+    /**
+     * Set our options to these values:
+     */
+
+    Object.assign(this, params)
+  }
+}
 const optionDefinitions = [
-  { name: 'config', type: String, lazyMultiple: true },
+  { name: 'config', type: params => new Params(params), lazyMultiple: true },
   { name: 'detach', alias: 'd', type: Boolean },
   { name: 'env', alias: 'e', type: String, lazyMultiple: true },
   { name: 'host', alias: 'H', type: String },
