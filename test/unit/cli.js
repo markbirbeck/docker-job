@@ -19,15 +19,18 @@ tap.test('cli', t => {
   })
 
   t.test('config', t => {
-    const config = options('--config src=foo.sh,target=/usr/src/app/bar.sh hello-world'.split(' '))
-    t.same(config, {
-      args: [],
-      replicas: 1,
-      config: [{
-        src: 'foo.sh',
-        target: '/usr/src/app/bar.sh'
-      }],
-      image: 'hello-world'
+    t.test('src and target', t => {
+      const config = options('--config src=foo.sh,target=/usr/src/app/bar.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          src: 'foo.sh',
+          target: '/usr/src/app/bar.sh'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
     })
     t.end()
   })
