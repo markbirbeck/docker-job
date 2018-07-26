@@ -70,6 +70,14 @@ class ConfigParams extends Params {
     if (!this.uid) {
       this.uid = '0'
     }
+
+    /**
+     * The 'mode' value defaults to 292 (a number):
+     */
+
+    if (this.mode === undefined) {
+      this.mode = 292
+    }
   }
 }
 
