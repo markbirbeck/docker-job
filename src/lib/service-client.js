@@ -42,7 +42,7 @@ class ServiceClient {
                   Name: params.target,
                   UID: params.uid,
                   GID: params.gid,
-                  Mode: (params.mode && +params.mode) || 292
+                  Mode: params.mode
                 },
                 ConfigID,
                 ConfigName: params.source

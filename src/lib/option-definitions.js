@@ -78,6 +78,7 @@ class ConfigParams extends Params {
     if (this.mode === undefined) {
       this.mode = 292
     }
+    this.mode = Number(this.mode)
   }
 }
 
