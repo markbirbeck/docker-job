@@ -1,4 +1,3 @@
-const querystring = require('querystring')
 const dockerEngine = require('docker-engine')
 const { poll } = require('./poll')
 
@@ -19,38 +18,7 @@ class ServiceClient {
           Args: args,
           Env: env,
           Configs: config && await Promise.all(config.map(
-            async c => {
-              /**
-               * Parse the config parameter as a set of comma-separate name/value
-               * pairs:
-               */
-
-              let params = querystring.parse(c, ',')
-
-              /**
-               * If there is no 'source' value...
-               */
-
-              if (!params.source) {
-
-                /**
-                 * ...then check whether we have 'src' instead...
-                 */
-
-                if (params.src) {
-                  params.source = params.src
-                  delete params.src
-                }
-
-                /**
-                 * ...otherwise use the entire string as the source, with no
-                 * other parameters:
-                 */
-
-                else {
-                  params = { source: c }
-                }
-              }
+            async params => {
 
               /**
                * Lookup the config's ID from the name:
