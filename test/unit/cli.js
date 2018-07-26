@@ -32,6 +32,21 @@ tap.test('cli', t => {
       })
       t.end()
     })
+
+    t.test('source, target and mode', t => {
+      const config = options('--config mode=292,source=foo2.sh,target=/usr/src/app/bar2.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          source: 'foo2.sh',
+          target: '/usr/src/app/bar2.sh',
+          mode: 292
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
     t.end()
   })
 
