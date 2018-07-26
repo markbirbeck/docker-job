@@ -17,8 +17,43 @@ class Params {
     Object.assign(this, params)
   }
 }
+
+class ConfigParams extends Params {
+  constructor(s) {
+    /**
+     * If there are no name/value pairs then treat the entire input as the source:
+     */
+
+    super(s.includes('=') ? s : `source=${s}`)
+
+    /**
+     * If there is no 'source' value...
+     */
+
+    if (!this.source) {
+
+      /**
+       * ...then check whether we have 'src' instead...
+       */
+
+      if (this.src) {
+        this.source = this.src
+        delete this.src
+      }
+
+      /**
+       * ...otherwise we have an error:
+       */
+
+      else {
+        throw new Error(`invalid argument "${s}" for "--config" flag: no source was found`)
+      }
+    }
+  }
+}
+
 const optionDefinitions = [
-  { name: 'config', type: params => new Params(params), lazyMultiple: true },
+  { name: 'config', type: params => new ConfigParams(params), lazyMultiple: true },
   { name: 'detach', alias: 'd', type: Boolean },
   { name: 'env', alias: 'e', type: String, lazyMultiple: true },
   { name: 'host', alias: 'H', type: String },
