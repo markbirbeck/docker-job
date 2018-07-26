@@ -49,6 +49,15 @@ class ConfigParams extends Params {
         throw new Error(`invalid argument "${s}" for "--config" flag: no source was found`)
       }
     }
+
+    /**
+     * If there is no 'target' value then use the name of the source, but in
+     * the root folder:
+     */
+
+    if (!this.target) {
+      this.target = `/${this.source}`
+    }
   }
 }
 

@@ -39,7 +39,7 @@ class ServiceClient {
 
               return {
                 File: {
-                  Name: params.target || params.source,
+                  Name: params.target,
                   UID: params.uid || '0',
                   GID: params.gid || '0',
                   Mode: (params.mode && +params.mode) || 292
