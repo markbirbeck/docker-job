@@ -18,6 +18,81 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('config', t => {
+    t.test('treat no params as a source', t => {
+      const config = options('--config foo3.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          gid: '0',
+          mode: 292,
+          source: 'foo3.sh',
+          target: '/foo3.sh',
+          uid: '0'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+
+    t.test('src and target', t => {
+      const config = options('--config src=foo.sh,target=/usr/src/app/bar.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          gid: '0',
+          mode: 292,
+          /**
+           * 'src' and 'source' are equivalent:
+           */
+
+          source: 'foo.sh',
+          target: '/usr/src/app/bar.sh',
+          uid: '0'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+
+    t.test('source, target and mode', t => {
+      const config = options('--config mode=300,source=foo2.sh,target=/usr/src/app/bar2.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          gid: '0',
+          source: 'foo2.sh',
+          target: '/usr/src/app/bar2.sh',
+          mode: 300,
+          uid: '0'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+
+    t.test('source and gid', t => {
+      const config = options('--config gid=100,uid=1000,source=foo2.sh hello-world'.split(' '))
+      t.same(config, {
+        args: [],
+        replicas: 1,
+        config: [{
+          gid: '100',
+          mode: 292,
+          source: 'foo2.sh',
+          target: '/foo2.sh',
+          uid: '1000'
+        }],
+        image: 'hello-world'
+      })
+      t.end()
+    })
+    t.end()
+  })
+
   t.test('default value for replicas', t => {
     const config = options(['hello-world'])
     t.same(config, {

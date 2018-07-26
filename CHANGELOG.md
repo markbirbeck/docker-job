@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.9.0] - 2018-07-26
+### Added
+- Add an option to allow config files to be used by jobs (#49).
+
 ## [v0.8.0] - 2018-07-19
 ### Added
 - Output details of any error on task failure (#46).
@@ -61,4 +65,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.7.0]: https://github.com/markbirbeck/docker-job/compare/v0.6.0...v0.7.0
 [v0.7.1]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.7.1
 [v0.8.0]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.8.0
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.8.0...HEAD
+[v0.9.0]: https://github.com/markbirbeck/docker-job/compare/v0.8.0...v0.9.0
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.9.0...HEAD

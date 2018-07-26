@@ -10,13 +10,45 @@ class ServiceClient {
    * Create a service:
    */
 
-  async create(image, args, name, env, volume) {
+  async create(image, args, name, env, volume, config) {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
           Image: image,
           Args: args,
           Env: env,
+          Configs: config && await Promise.all(config.map(
+            async params => {
+
+              /**
+               * Lookup the config's ID from the name:
+               */
+
+              const configList = await this.client.Config.ConfigList({
+                filters: `{"name": {"${params.source}": true}}`
+              })
+              if (!configList.length) {
+                throw new Error(`config not found: ${params.source}`)
+              }
+              const ConfigID = configList[0].ID
+
+              /**
+               * Finally, return the structure needed for a config when creating
+               * a service:
+               */
+
+              return {
+                File: {
+                  Name: params.target,
+                  UID: params.uid,
+                  GID: params.gid,
+                  Mode: params.mode
+                },
+                ConfigID,
+                ConfigName: params.source
+              }
+            }
+          )),
           Mounts: volume && volume.map(
             v => {
               const [Source, Target] = v.split(':')
