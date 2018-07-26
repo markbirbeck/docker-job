@@ -1,5 +1,6 @@
 const commandLineArgs = require('command-line-args')
 const optionDefinitions = [
+  { name: 'config', type: String, lazyMultiple: true },
   { name: 'detach', alias: 'd', type: Boolean },
   { name: 'env', alias: 'e', type: String, lazyMultiple: true },
   { name: 'host', alias: 'H', type: String },
