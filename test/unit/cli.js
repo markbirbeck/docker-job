@@ -26,6 +26,7 @@ tap.test('cli', t => {
         replicas: 1,
         config: [{
           gid: '0',
+          mode: 292,
           source: 'foo3.sh',
           target: '/foo3.sh',
           uid: '0'
@@ -42,6 +43,7 @@ tap.test('cli', t => {
         replicas: 1,
         config: [{
           gid: '0',
+          mode: 292,
           /**
            * 'src' and 'source' are equivalent:
            */
@@ -79,6 +81,7 @@ tap.test('cli', t => {
         replicas: 1,
         config: [{
           gid: '100',
+          mode: 292,
           source: 'foo2.sh',
           target: '/foo2.sh',
           uid: '1000'
