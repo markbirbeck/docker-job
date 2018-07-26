@@ -23,9 +23,10 @@ tap.test('cli', t => {
     t.same(config, {
       args: [],
       replicas: 1,
-      config: [
-        'src=foo.sh,target=/usr/src/app/bar.sh'
-      ],
+      config: [{
+        src: 'foo.sh',
+        target: '/usr/src/app/bar.sh'
+      }],
       image: 'hello-world'
     })
     t.end()
