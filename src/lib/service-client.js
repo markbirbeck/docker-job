@@ -1,3 +1,4 @@
+const querystring = require('querystring')
 const dockerEngine = require('docker-engine')
 const { poll } = require('./poll')
 
@@ -10,13 +11,76 @@ class ServiceClient {
    * Create a service:
    */
 
-  async create(image, args, name, env, volume) {
+  async create(image, args, name, env, volume, config) {
     const defaultSpec = {
       TaskTemplate: {
         ContainerSpec: {
           Image: image,
           Args: args,
           Env: env,
+          Configs: config && await Promise.all(config.map(
+            async c => {
+              /**
+               * Parse the config parameter as a set of comma-separate name/value
+               * pairs:
+               */
+
+              let params = querystring.parse(c, ',')
+
+              /**
+               * If there is no 'source' value...
+               */
+
+              if (!params.source) {
+
+                /**
+                 * ...then check whether we have 'src' instead...
+                 */
+
+                if (params.src) {
+                  params.source = params.src
+                  delete params.src
+                }
+
+                /**
+                 * ...otherwise use the entire string as the source, with no
+                 * other parameters:
+                 */
+
+                else {
+                  params = { source: c }
+                }
+              }
+
+              /**
+               * Lookup the config's ID from the name:
+               */
+
+              const configList = await this.client.Config.ConfigList({
+                filters: `{"name": {"${params.source}": true}}`
+              })
+              if (!configList.length) {
+                throw new Error(`config not found: ${params.source}`)
+              }
+              const ConfigID = configList[0].ID
+
+              /**
+               * Finally, return the structure needed for a config when creating
+               * a service:
+               */
+
+              return {
+                File: {
+                  Name: params.target || params.source,
+                  UID: params.uid || '0',
+                  GID: params.gid || '0',
+                  Mode: (params.mode && +params.mode) || 292
+                },
+                ConfigID,
+                ConfigName: params.source
+              }
+            }
+          )),
           Mounts: volume && volume.map(
             v => {
               const [Source, Target] = v.split(':')
