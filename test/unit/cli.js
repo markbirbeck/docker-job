@@ -25,7 +25,11 @@ tap.test('cli', t => {
         args: [],
         replicas: 1,
         config: [{
-          src: 'foo.sh',
+          /**
+           * 'src' and 'source' are equivalent:
+           */
+
+          source: 'foo.sh',
           target: '/usr/src/app/bar.sh'
         }],
         image: 'hello-world'
