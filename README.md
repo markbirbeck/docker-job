@@ -85,6 +85,16 @@ dj -v /var/run/docker.sock:/var/run/docker.sock \
   tmaier/docker-compose docker-compose up
 ```
 
+Alongside volumes Docker Swarm also supports config files, which can be accessed with `--config`:
+
+```shell
+dj \
+  --showlogs \
+  --config src=foo.sh,target=/usr/src/app/bar.sh \
+  alpine \
+    cat /usr/src/app/bar.sh
+```
+
 To provide one or more environment variables use `--env` or `-e`:
 
 ```shell
