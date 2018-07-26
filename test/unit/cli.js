@@ -18,6 +18,19 @@ tap.test('cli', t => {
     t.end()
   })
 
+  t.test('config', t => {
+    const config = options('--config src=foo.sh,target=/usr/src/app/bar.sh hello-world'.split(' '))
+    t.same(config, {
+      args: [],
+      replicas: 1,
+      config: [
+        'src=foo.sh,target=/usr/src/app/bar.sh'
+      ],
+      image: 'hello-world'
+    })
+    t.end()
+  })
+
   t.test('default value for replicas', t => {
     const config = options(['hello-world'])
     t.same(config, {
