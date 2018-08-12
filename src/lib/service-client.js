@@ -24,7 +24,7 @@ class ServiceClient {
                * Lookup the config's ID from the name:
                */
 
-              const configList = await this.client.Config.ConfigList({
+              const configList = await this.client.ConfigList({
                 filters: `{"name": {"${params.source}": true}}`
               })
               if (!configList.length) {
@@ -115,7 +115,7 @@ class ServiceClient {
      * Otherwise we're good to go:
      */
 
-    const service = await this.client.Service.ServiceCreate({
+    const service = await this.client.ServiceCreate({
       body: {
         Name: name,
         ...defaultSpec
@@ -130,7 +130,7 @@ class ServiceClient {
    */
 
   delete(id) {
-    return this.client.Service.ServiceDelete({id});
+    return this.client.ServiceDelete({id});
   }
 
   /**
@@ -138,7 +138,7 @@ class ServiceClient {
    */
 
   async inspect(id) {
-    return await this.client.Service.ServiceInspect({id});
+    return await this.client.ServiceInspect({id});
   }
 
   /**
@@ -146,7 +146,7 @@ class ServiceClient {
    */
 
   async inspectTask(id) {
-    return await this.client.Task.TaskInspect({id});
+    return await this.client.TaskInspect({id});
   }
 
   /**
@@ -154,7 +154,7 @@ class ServiceClient {
    */
 
   async logs(id) {
-    return await this.client.Service
+    return await this.client
     .ServiceLogs({
       id,
       stdout: true, stderr: true, follow: false
@@ -166,7 +166,7 @@ class ServiceClient {
    */
 
   async logsContainer(id) {
-    return await this.client.Container
+    return await this.client
     .ContainerLogs({
       id,
       stdout: true, stderr: true, follow: false
@@ -178,12 +178,7 @@ class ServiceClient {
    */
 
   async logsTask(id) {
-    /**
-     * Note that this is not on the 'Task' object since it's still flagged
-     * as experimental:
-     */
-
-    return await this.client.default
+    return await this.client
     .TaskLogs({
       id,
       stdout: true, stderr: true, follow: false
@@ -307,7 +302,7 @@ class ServiceClient {
      * Now we can update the service with the new spec:
      */
 
-    return await this.client.Service
+    return await this.client
     .ServiceUpdate({
       id,
       body: taskSpec,
@@ -320,7 +315,7 @@ class ServiceClient {
    */
 
   async taskList(id) {
-    return await this.client.Task
+    return await this.client
     .TaskList({
       filters: `{"service": {"${id}": true}}`
     })
