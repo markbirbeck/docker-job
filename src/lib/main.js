@@ -16,8 +16,6 @@ const main = async (options, config) => {
   }
   console.log(id)
 
-  let shouldRepeat
-
   /**
    * Function to call when polled task is complete:
    */
@@ -43,8 +41,8 @@ const main = async (options, config) => {
     return shouldRepeat
   }
 
+  let shouldRepeat = false
   do {
-    shouldRepeat = false
     let response
 
     try {
@@ -56,7 +54,7 @@ const main = async (options, config) => {
     if (response.Warnings !== null) throw new Error(response)
 
     if (!options.detach) {
-      await serviceClient.poll(id, onTaskComplete, options.showlogs)
+      shouldRepeat = await serviceClient.poll(id, onTaskComplete, options.showlogs)
     }
   } while (shouldRepeat)
 
