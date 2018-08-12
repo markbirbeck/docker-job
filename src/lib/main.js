@@ -56,7 +56,7 @@ const main = async (options, config) => {
     if (response.Warnings !== null) throw new Error(response)
 
     if (!options.detach) {
-      await serviceClient.poll(id, onTaskComplete)
+      await serviceClient.poll(id, onTaskComplete, options.showlogs)
     }
   } while (shouldRepeat)
 

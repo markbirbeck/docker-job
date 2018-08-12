@@ -189,7 +189,7 @@ class ServiceClient {
    * Poll a service until all of its tasks are complete:
    */
 
-  async poll(id, cb) {
+  async poll(id, cb, showlogs = false) {
     let foundTask = false
 
     do {
@@ -222,6 +222,17 @@ class ServiceClient {
          */
 
         try {
+          /**
+           * If we are to show the logs then get a stream from the Docker Engine:
+           */
+
+          if (showlogs) {
+            const res = await this.logsTask(task.ID, true)
+            res.setEncoding('utf8')
+            res.on('data', chunk => {
+              console.log(chunk)
+            })
+          }
           await poll(this.taskState.bind(this), task.ID)
           await cb(task)
         } catch(e) {
