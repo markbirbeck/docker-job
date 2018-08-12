@@ -153,11 +153,11 @@ class ServiceClient {
    * Access logs for a service:
    */
 
-  async logs(id) {
+  async logs(id, follow = false) {
     return await this.client
     .ServiceLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
@@ -165,11 +165,11 @@ class ServiceClient {
    * Access logs for a container:
    */
 
-  async logsContainer(id) {
+  async logsContainer(id, follow = false) {
     return await this.client
     .ContainerLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
@@ -177,11 +177,11 @@ class ServiceClient {
    * Access logs for a task:
    */
 
-  async logsTask(id) {
+  async logsTask(id, follow = false) {
     return await this.client
     .TaskLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
