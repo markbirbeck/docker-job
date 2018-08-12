@@ -27,7 +27,7 @@ dj hello-world
 Any parameters after the image name will be passed to the launched job:
 
 ```shell
-dh alpine echo hello world
+dj alpine echo hello world
 ```
 
 The app will provide an identifier for the service, and then wait until it completes before exiting. To show the logs on exit use the `--showlogs` option:
