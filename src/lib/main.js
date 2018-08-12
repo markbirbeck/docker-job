@@ -37,12 +37,8 @@ const main = async (options, config) => {
          */
 
         let logs
-        if (options.showlogs || options.repeatUntil || options.repeatWhile) {
+        if (options.repeatUntil || options.repeatWhile) {
           logs = await serviceClient.logsTask(task.ID)
-        }
-
-        if (options.showlogs) {
-          console.log(logs)
         }
 
         /**
