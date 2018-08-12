@@ -190,6 +190,7 @@ class ServiceClient {
    */
 
   async poll(id, cb, showlogs = false) {
+    let ret
     let foundTask = false
 
     do {
@@ -234,7 +235,7 @@ class ServiceClient {
             })
           }
           await poll(this.taskState.bind(this), task.ID)
-          await cb(task)
+          ret = await cb(task)
         } catch(e) {
           process.exitCode = -1
           /**
@@ -247,6 +248,7 @@ class ServiceClient {
         }
       }
     } while (!foundTask)
+    return ret
   }
 
   /**
