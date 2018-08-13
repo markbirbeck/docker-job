@@ -1,3 +1,4 @@
+const debug = require('debug')('docker-job:service-client')
 const dockerEngine = require('docker-engine')
 const { poll } = require('./poll')
 
@@ -329,7 +330,7 @@ class ServiceClient {
    * Run a service:
    */
 
-  async start(id, replicas) {
+  async start(id, replicas, pull) {
     /**
      * To update a service we need the current spec and version number:
      */
@@ -337,6 +338,17 @@ class ServiceClient {
     const info = await this.inspect(id);
     const version = info.Version.Index;
     const spec = info.Spec;
+
+    /**
+     * The image might need to be pulled first:
+     */
+
+    if (pull) {
+      const fromImage = info.Spec.TaskTemplate.ContainerSpec.Image
+      debug(`About to pull ${fromImage}`)
+      const pulled = await this.client.ImageCreate({ fromImage })
+      debug(`Pull result: ${pulled}`)
+    }
 
     /**
      * Next we create a new spec with a modified replicas value:

@@ -46,7 +46,7 @@ const main = async (options, config) => {
     let response
 
     try {
-      response = await serviceClient.start(id, options.replicas)
+      response = await serviceClient.start(id, options.replicas, options.pull)
     } catch(e) {
       throw new Error(`Failed to start service: ${e}`)
     }

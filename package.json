@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "command-line-args": "^5.0.2",
+    "debug": "^3.1.0",
     "docker-engine": "^0.6.0"
   },
   "keywords": [
