@@ -88,6 +88,7 @@ const optionDefinitions = [
   { name: 'env', alias: 'e', type: String, lazyMultiple: true },
   { name: 'host', alias: 'H', type: String },
   { name: 'name', type: String },
+  { name: 'pull', type: Boolean },
   { name: 'replicas', type: Number, defaultValue: 1 },
   { name: 'repeat-until', type: String },
   { name: 'repeat-while', type: String },
