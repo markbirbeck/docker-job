@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.10.0] - 2018-08-13
+### Added
+- Direct logs to stdout or stderr based on stream type returned from Docker API (#12).
+- Use streaming for --showlogs (#51).
+
+### Fixed
+- Shouldn't allow both '--detach' and '--rm' (#52).
+
 ## [v0.9.0] - 2018-07-26
 ### Added
 - Add an option to allow config files to be used by jobs (#49).
@@ -66,4 +74,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [v0.7.1]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.7.1
 [v0.8.0]: https://github.com/markbirbeck/docker-job/compare/v0.7.0...v0.8.0
 [v0.9.0]: https://github.com/markbirbeck/docker-job/compare/v0.8.0...v0.9.0
-[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.9.0...HEAD
+[v0.10.0]: https://github.com/markbirbeck/docker-job/compare/v0.9.0...v0.10.0
+[Unreleased]: https://github.com/markbirbeck/docker-job/compare/v0.10.0...HEAD
