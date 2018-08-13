@@ -230,9 +230,54 @@ class ServiceClient {
 
           if (showlogs) {
             res = await this.logsTask(task.ID, true)
-            res.setEncoding('utf8')
             res.on('data', chunk => {
-              console.log(chunk)
+              const STREAM_TYPE_OFFSET = 0
+              const FRAME_SIZE_OFFSET = 4
+              const STREAM_HEADER_SIZE = 8
+
+              /**
+               * Establish the frame of text:
+               */
+
+              const frameSize = chunk.readUInt32BE(FRAME_SIZE_OFFSET)
+              const frame = chunk.toString('utf8', STREAM_HEADER_SIZE, STREAM_HEADER_SIZE + frameSize)
+
+              /**
+               * Work out where to send the logs to (stderr or stdout)
+               */
+
+              let streamType = chunk.readInt8(STREAM_TYPE_OFFSET)
+              switch (streamType) {
+                /**
+                 * stdin goes to stdout:
+                 */
+
+                case 0:
+                  streamType = 'stdout'
+                  break
+
+                /**
+                 * stdout goes to stdout:
+                 */
+
+                case 1:
+                  streamType = 'stdout'
+                  break
+
+                /**
+                 * stderr goes to stderr:
+                 */
+
+                case 2:
+                  streamType = 'stderr'
+                  break
+              }
+
+              /**
+               * Write the frame to the relevant stream:
+               */
+
+              process[streamType].write(frame)
             })
           }
           await poll(this.taskState.bind(this), task.ID)
