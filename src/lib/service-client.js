@@ -222,13 +222,14 @@ class ServiceClient {
          * If we found the latest task then we can now do the polling:
          */
 
+        let res
         try {
           /**
            * If we are to show the logs then get a stream from the Docker Engine:
            */
 
           if (showlogs) {
-            const res = await this.logsTask(task.ID, true)
+            res = await this.logsTask(task.ID, true)
             res.setEncoding('utf8')
             res.on('data', chunk => {
               console.log(chunk)
@@ -245,6 +246,10 @@ class ServiceClient {
 
           const state = await this.inspectTask(task.ID)
           console.error(`${task.ID}: ${e.message}: "${state.Status.Err} (${state.Status.State})"`)
+        } finally {
+          if (res) {
+            res.destroy()
+          }
         }
       }
     } while (!foundTask)
