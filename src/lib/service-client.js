@@ -329,7 +329,7 @@ class ServiceClient {
    * Run a service:
    */
 
-  async start(id, replicas) {
+  async start(id, replicas, pull) {
     /**
      * To update a service we need the current spec and version number:
      */
@@ -337,6 +337,15 @@ class ServiceClient {
     const info = await this.inspect(id);
     const version = info.Version.Index;
     const spec = info.Spec;
+
+    /**
+     * The image might need to be pulled first:
+     */
+
+    if (pull) {
+      const fromImage = info.Spec.TaskTemplate.ContainerSpec.Image
+      await this.client.ImageCreate({ fromImage })
+    }
 
     /**
      * Next we create a new spec with a modified replicas value:
