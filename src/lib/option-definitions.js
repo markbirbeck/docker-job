@@ -108,6 +108,10 @@ const options = (argv) => {
     throw new Error('Cannot set both --detach and --showlogs')
   }
 
+  if (config.detach && config.rm) {
+    throw new Error('Cannot set both --detach and --rm')
+  }
+
   /**
    * If there are values in the 'unknown' bucket...
    */
