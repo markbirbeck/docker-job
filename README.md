@@ -42,6 +42,12 @@ Alternatively, to exit immediately without waiting for completion, use the detac
 dj --detach hello-world
 ```
 
+To force the image to be pulled from a registry before running, add the `--pull` option:
+
+```shell
+dj --pull hello-world
+```
+
 To launch a number of instances of the image, add the `--replicas` option:
 
 ```shell
