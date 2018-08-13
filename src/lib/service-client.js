@@ -1,3 +1,4 @@
+const debug = require('debug')('docker-job:service-client')
 const dockerEngine = require('docker-engine')
 const { poll } = require('./poll')
 
@@ -344,7 +345,9 @@ class ServiceClient {
 
     if (pull) {
       const fromImage = info.Spec.TaskTemplate.ContainerSpec.Image
-      await this.client.ImageCreate({ fromImage })
+      debug(`About to pull ${fromImage}`)
+      const pulled = await this.client.ImageCreate({ fromImage })
+      debug(`Pull result: ${pulled}`)
     }
 
     /**
