@@ -24,7 +24,7 @@ class ServiceClient {
                * Lookup the config's ID from the name:
                */
 
-              const configList = await this.client.Config.ConfigList({
+              const configList = await this.client.ConfigList({
                 filters: `{"name": {"${params.source}": true}}`
               })
               if (!configList.length) {
@@ -115,7 +115,7 @@ class ServiceClient {
      * Otherwise we're good to go:
      */
 
-    const service = await this.client.Service.ServiceCreate({
+    const service = await this.client.ServiceCreate({
       body: {
         Name: name,
         ...defaultSpec
@@ -130,7 +130,7 @@ class ServiceClient {
    */
 
   delete(id) {
-    return this.client.Service.ServiceDelete({id});
+    return this.client.ServiceDelete({id});
   }
 
   /**
@@ -138,7 +138,7 @@ class ServiceClient {
    */
 
   async inspect(id) {
-    return await this.client.Service.ServiceInspect({id});
+    return await this.client.ServiceInspect({id});
   }
 
   /**
@@ -146,18 +146,18 @@ class ServiceClient {
    */
 
   async inspectTask(id) {
-    return await this.client.Task.TaskInspect({id});
+    return await this.client.TaskInspect({id});
   }
 
   /**
    * Access logs for a service:
    */
 
-  async logs(id) {
-    return await this.client.Service
+  async logs(id, follow = false) {
+    return await this.client
     .ServiceLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
@@ -165,11 +165,11 @@ class ServiceClient {
    * Access logs for a container:
    */
 
-  async logsContainer(id) {
-    return await this.client.Container
+  async logsContainer(id, follow = false) {
+    return await this.client
     .ContainerLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
@@ -177,16 +177,11 @@ class ServiceClient {
    * Access logs for a task:
    */
 
-  async logsTask(id) {
-    /**
-     * Note that this is not on the 'Task' object since it's still flagged
-     * as experimental:
-     */
-
-    return await this.client.default
+  async logsTask(id, follow = false) {
+    return await this.client
     .TaskLogs({
       id,
-      stdout: true, stderr: true, follow: false
+      stdout: true, stderr: true, follow
     })
   }
 
@@ -194,7 +189,8 @@ class ServiceClient {
    * Poll a service until all of its tasks are complete:
    */
 
-  async poll(id, cb) {
+  async poll(id, cb, showlogs = false) {
+    let ret
     let foundTask = false
 
     do {
@@ -226,9 +222,21 @@ class ServiceClient {
          * If we found the latest task then we can now do the polling:
          */
 
+        let res
         try {
+          /**
+           * If we are to show the logs then get a stream from the Docker Engine:
+           */
+
+          if (showlogs) {
+            res = await this.logsTask(task.ID, true)
+            res.setEncoding('utf8')
+            res.on('data', chunk => {
+              console.log(chunk)
+            })
+          }
           await poll(this.taskState.bind(this), task.ID)
-          await cb(task)
+          ret = await cb(task)
         } catch(e) {
           process.exitCode = -1
           /**
@@ -238,9 +246,14 @@ class ServiceClient {
 
           const state = await this.inspectTask(task.ID)
           console.error(`${task.ID}: ${e.message}: "${state.Status.Err} (${state.Status.State})"`)
+        } finally {
+          if (res) {
+            res.destroy()
+          }
         }
       }
     } while (!foundTask)
+    return ret
   }
 
   /**
@@ -307,7 +320,7 @@ class ServiceClient {
      * Now we can update the service with the new spec:
      */
 
-    return await this.client.Service
+    return await this.client
     .ServiceUpdate({
       id,
       body: taskSpec,
@@ -320,7 +333,7 @@ class ServiceClient {
    */
 
   async taskList(id) {
-    return await this.client.Task
+    return await this.client
     .TaskList({
       filters: `{"service": {"${id}": true}}`
     })

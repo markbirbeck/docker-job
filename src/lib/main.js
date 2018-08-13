@@ -16,10 +16,33 @@ const main = async (options, config) => {
   }
   console.log(id)
 
-  let shouldRepeat
+  /**
+   * Function to call when polled task is complete:
+   */
 
+  const onTaskComplete = async task => {
+    let shouldRepeat = false
+
+    /**
+     * If the task is to be repeated until a certain string is found (or whilst
+     * a certain string is *not* found) then check for that in the logs:
+     */
+
+    const repeat = options.repeatUntil || options.repeatWhile
+    if (repeat) {
+      const logs = await serviceClient.logsTask(task.ID)
+      const until = options.repeatUntil ? true : false
+      const re = new RegExp(repeat)
+      const m = logs.match(re)
+      if (until ? !m : m) {
+        shouldRepeat = true
+      }
+    }
+    return shouldRepeat
+  }
+
+  let shouldRepeat = false
   do {
-    shouldRepeat = false
     let response
 
     try {
@@ -31,35 +54,7 @@ const main = async (options, config) => {
     if (response.Warnings !== null) throw new Error(response)
 
     if (!options.detach) {
-      await serviceClient.poll(id, async task => {
-        /**
-         * Once completed get the task's details and use them to get the logs:
-         */
-
-        let logs
-        if (options.showlogs || options.repeatUntil || options.repeatWhile) {
-          logs = await serviceClient.logsTask(task.ID)
-        }
-
-        if (options.showlogs) {
-          console.log(logs)
-        }
-
-        /**
-         * If the task is to be repeated until a certain string is found (or whilst
-         * a certain string is *not* found) then check for that in the logs:
-         */
-
-        const repeat = options.repeatUntil || options.repeatWhile
-        if (repeat) {
-          const until = options.repeatUntil ? true : false
-          const re = new RegExp(repeat)
-          const m = logs.match(re)
-          if (until ? !m : m) {
-            shouldRepeat = true
-          }
-        }
-      })
+      shouldRepeat = await serviceClient.poll(id, onTaskComplete, options.showlogs)
     }
   } while (shouldRepeat)
 
