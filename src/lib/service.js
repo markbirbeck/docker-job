@@ -41,7 +41,8 @@ if (options.sshHostname) {
    */
 
   if (options.sshIdentityFile) {
-    config.privateKey = require('fs').readFileSync(__dirname + '/' + options.sshIdentityFile, 'utf8')
+    const identityFile = require('path').resolve(process.cwd(), options.sshIdentityFile)
+    config.privateKey = require('fs').readFileSync(identityFile, 'utf8')
   }
 
   /**
