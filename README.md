@@ -147,7 +147,7 @@ To use a swarm that is running on AWS, create an SSH tunnel with the `---ssh-*` 
 ```shell
 dj \
   --ssh-remote /var/run/docker.sock \
-  --ssh-identify-file ./docker-swarm.pem \
+  --ssh-identity-file ./docker-swarm.pem \
   --ssh-hostname docker@ec2-54-183-237-159.us-west.compute-1.amazonaws.com \
   hello-world
 ```

@@ -37,7 +37,7 @@ if (options.sshHostname) {
   }
 
   /**
-   * If their is a private key then read it and add it to the config:
+   * If there is a private key then read it and add it to the config:
    */
 
   if (options.sshIdentityFile) {
